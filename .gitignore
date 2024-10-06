@@ -1,3 +1,4 @@
 data
 .vscode
 output
+scripts/__pycache__
