@@ -13,6 +13,7 @@ from transformers import ViTForImageClassification, TrainingArguments, Trainer
 
 import torch
 from torchvision import transforms
+from torchvision.models import inception_v3, Inception_V3_Weights
 from torch.utils.data import Dataset
 from torch.optim import AdamW
 import torch.optim as optim
@@ -23,12 +24,12 @@ from sklearn import model_selection
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 
 # IMAGE CONFIGURATIONS
-IMAGE_SIZE = [224, 224]
+IMAGE_SIZE = [299, 299]
 
 # TRAINING CONFIGURATIONS
 LEARNING_RATE = 0.001
 MOMENTUM = 0.9
-epochs = 50
+epochs = 30
 batch_size = 128
 
 
@@ -73,7 +74,7 @@ def calc_mean_std(train_df, trainloader):
 
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-output_dir = f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/{timestamp}/"
+output_dir = f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/{timestamp}/"
 os.makedirs(output_dir, exist_ok=True)
 
 # Create a logger
@@ -143,53 +144,32 @@ dataloader = {
     ),
 }
 
-model = timm.create_model("tf_efficientnet_b4.ns_jft_in1k", pretrained=True)
-
-
-# Modify classifier with pooling and flattening
-class CustomClassifier(nn.Module):
-    def __init__(self, model, num_unique_labels):
-        super(CustomClassifier, self).__init__()
-        self.model = model
-        self.model.classifier = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),  # Pool to (batch_size, 1792, 1, 1)
-            nn.Flatten(),  # Flatten to (batch_size, 1792)
-            nn.Dropout(0.5),
-            nn.Linear(1792, num_unique_labels),  # Final layer
-        )
-
-    def forward(self, x):
-        x = self.model.forward_features(x)
-        # print("Shape after forward_features:", x.shape)  # Expect (batch_size, 1792, 7, 7)
-        x = self.model.classifier[0](x)  # AdaptiveAvgPool2d
-        # print("Shape after AdaptiveAvgPool2d:", x.shape)  # Expect (batch_size, 1792, 1, 1)
-        x = self.model.classifier[1](x)  # Flatten
-        # print("Shape after Flatten:", x.shape)  # Expect (batch_size, 1792)
-        x = self.model.classifier[3](x)  # Linear layer
-        # print("Shape after Linear:", x.shape)  # Expect (batch_size, num_unique_labels)
-        return x
-
-
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
-model = CustomClassifier(model, num_unique_labels)
-model = model.to(device)
+weights = Inception_V3_Weights
+model = inception_v3(weights=weights)
+num_classes = num_unique_labels
+model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 for name, param in model.named_parameters():
-    if "fc" in name or "classifier" in name:  # Adjust for final classification layer
+    if "fc" in name:  # Unfreeze the final classification layer
         param.requires_grad = True
     else:
         param.requires_grad = False
-# Define loss and optimizer
+
+# Define the loss function and optimizer
+# MODIFICATIONS
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.001)
+optimizer = optim.SGD(model.fc.parameters(), lr=LEARNING_RATE, momentum=MOMENTUM)
+
+device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
+model = model.to(device)
 
 train_losses, val_losses = [], []
 train_accuracies, val_accuracies = [], []
 
-logging.info("Start of training.")
-
 for epoch in range(epochs):
     logging.info(f"Epoch {epoch+1}/{epochs}")
+    logging.info("-" * 10)
+
     for phase in ["train", "val"]:
         if phase == "train":
             model.train()
@@ -199,13 +179,16 @@ for epoch in range(epochs):
         running_loss = 0.0
         running_corrects = 0
 
+        # Iterate over data
         for inputs, labels in dataloader[phase]:
             inputs, labels = inputs.to(device), labels.to(device)
 
             optimizer.zero_grad()
+
+            # Forward pass
             outputs = model(inputs)
 
-            # Handle outputs in tuple form
+            # Handle tuple outputs if necessary
             if isinstance(outputs, tuple):
                 outputs = outputs[0]
 
@@ -213,21 +196,24 @@ for epoch in range(epochs):
                 _, preds = torch.max(outputs, 1)
                 loss = criterion(outputs, labels)
 
+                # Backward pass and optimization (if in training phase)
                 if phase == "train":
                     loss.backward()
                     optimizer.step()
 
+            # Update running loss and correct predictions
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels)
 
+        # Compute epoch loss and accuracy
         if phase == "train":
             epoch_loss = running_loss / len(train_df)
-            epoch_acc = running_corrects.float() / len(train_df)
+            epoch_acc = running_corrects.double() / len(train_df)
             train_losses.append(epoch_loss)
             train_accuracies.append(epoch_acc.item())
         else:
             epoch_loss = running_loss / len(valid_df)
-            epoch_acc = running_corrects.float() / len(valid_df)
+            epoch_acc = running_corrects.double() / len(valid_df)
             val_losses.append(epoch_loss)
             val_accuracies.append(epoch_acc.item())
 
@@ -259,12 +245,12 @@ plt.xlabel("Epochs")
 plt.ylabel("Accuracy")
 plt.legend()
 
-# Save the figure
+# Save the training curves
 training_curves_path = os.path.join(output_dir, "training_curves.png")
 plt.savefig(training_curves_path)
 logging.info(f"Training curves saved at {training_curves_path}")
 
-# Generate confusion matrix
+# Generate confusion matrix for validation data
 model.eval()  # Set model to evaluation mode
 all_preds = []
 all_labels = []

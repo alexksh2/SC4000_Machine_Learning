@@ -23,7 +23,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDis
 IMAGE_SIZE = [224, 224]
 
 # TRAINING CONFIGURATIONS
-epochs = 3
+epochs = 30
 batch_size = 128
 
 
@@ -66,8 +66,11 @@ def calc_mean_std(train_df, trainloader):
     std = total_std.numpy()
     return mean, std
 
+
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-output_dir = f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/{timestamp}/"
+output_dir = (
+    f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/{timestamp}/"
+)
 os.makedirs(output_dir, exist_ok=True)
 
 # Create a logger
