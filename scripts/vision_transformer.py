@@ -95,7 +95,7 @@ image_files = glob(train_path + "/*.jp*g")
 
 # Data split
 unique_labels = df_train_data.labels.value_counts()
-num_unique_labels = unique_labels.nunique()
+num_unique_labels = unique_labels.index.nunique()
 df_train, df_valid = model_selection.train_test_split(
     df_train_data,
     test_size=0.2,

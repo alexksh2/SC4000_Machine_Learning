@@ -21,6 +21,7 @@ import timm
 import torch.nn as nn
 
 from sklearn import model_selection
+from sklearn.utils import resample
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 
 # IMAGE CONFIGURATIONS
@@ -96,9 +97,29 @@ train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_image
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")
 
+class_counts = df_train_data["labels"].value_counts()
+target_count = class_counts.min()
+
+df_train_data = pd.concat(
+    [
+        resample(
+            df_train_data[df_train_data["labels"] == c],
+            replace=False,  # don't sample with replacement
+            n_samples=target_count,  # target number of samples
+            random_state=42,
+        )
+        for c in class_counts.index
+    ]
+)
+
+# Shuffle the dataset after downsampling
+df_train_data = df_train_data.sample(frac=1, random_state=42).reset_index(drop=True)
+
+# df_downsampled.to_csv('downsampled_dataset.csv', index=False)
+
 # Data split
 unique_labels = df_train_data.labels.value_counts()
-num_unique_labels = unique_labels.nunique()
+num_unique_labels = unique_labels.index.nunique()
 df_train, df_valid = model_selection.train_test_split(
     df_train_data,
     test_size=0.2,
