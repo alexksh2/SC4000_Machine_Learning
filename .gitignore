@@ -1,4 +1,9 @@
 data
 .vscode
-output
 scripts/__pycache__
+*.pt
+*.pth
+*.json
+*.bin
+logs
+*.safetensors

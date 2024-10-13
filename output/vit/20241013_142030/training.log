@@ -1,0 +1,34 @@
+2024-10-13 14:34:25,478 - INFO - Validation accuracy: 0.7172
+2024-10-13 14:43:53,443 - INFO - Validation accuracy: 0.7777
+2024-10-13 14:53:18,976 - INFO - Validation accuracy: 0.8011
+2024-10-13 15:02:47,048 - INFO - Validation accuracy: 0.8098
+2024-10-13 15:12:14,315 - INFO - Validation accuracy: 0.8159
+2024-10-13 15:21:43,228 - INFO - Validation accuracy: 0.8193
+2024-10-13 15:31:11,763 - INFO - Validation accuracy: 0.8207
+2024-10-13 15:40:37,010 - INFO - Validation accuracy: 0.8327
+2024-10-13 15:50:03,931 - INFO - Validation accuracy: 0.8346
+2024-10-13 15:59:32,107 - INFO - Validation accuracy: 0.8322
+2024-10-13 16:08:59,777 - INFO - Validation accuracy: 0.8335
+2024-10-13 16:18:25,457 - INFO - Validation accuracy: 0.8348
+2024-10-13 16:27:50,664 - INFO - Validation accuracy: 0.8374
+2024-10-13 16:37:16,332 - INFO - Validation accuracy: 0.8394
+2024-10-13 16:46:43,067 - INFO - Validation accuracy: 0.8366
+2024-10-13 16:56:09,284 - INFO - Validation accuracy: 0.8353
+2024-10-13 17:02:53,949 - INFO - Validation accuracy: 0.8422
+2024-10-13 17:09:23,273 - INFO - Validation accuracy: 0.8407
+2024-10-13 17:15:52,396 - INFO - Validation accuracy: 0.8433
+2024-10-13 17:22:21,719 - INFO - Validation accuracy: 0.8457
+2024-10-13 17:28:50,486 - INFO - Validation accuracy: 0.8438
+2024-10-13 17:35:19,854 - INFO - Validation accuracy: 0.8466
+2024-10-13 17:41:49,571 - INFO - Validation accuracy: 0.8446
+2024-10-13 17:48:18,685 - INFO - Validation accuracy: 0.8449
+2024-10-13 17:54:47,351 - INFO - Validation accuracy: 0.8438
+2024-10-13 18:01:16,460 - INFO - Validation accuracy: 0.8477
+2024-10-13 18:07:45,531 - INFO - Validation accuracy: 0.8468
+2024-10-13 18:14:14,484 - INFO - Validation accuracy: 0.8473
+2024-10-13 18:20:43,502 - INFO - Validation accuracy: 0.8461
+2024-10-13 18:27:13,478 - INFO - Validation accuracy: 0.8468
+2024-10-13 18:28:04,838 - INFO - Validation accuracy: 0.8477
+2024-10-13 18:28:04,838 - INFO - Prediction metrics: {'test_loss': 0.44398751854896545, 'test_accuracy': 0.8477176122712992, 'test_runtime': 50.2558, 'test_samples_per_second': 107.669, 'test_steps_per_second': 0.219}
+2024-10-13 18:28:04,922 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241013_142030/confusion_matrix.png
+2024-10-13 18:28:05,033 - INFO - Training plots saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241013_142030/training_plots.png

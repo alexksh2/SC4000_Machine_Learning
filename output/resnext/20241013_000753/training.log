@@ -1,0 +1,19 @@
+2024-10-13 00:10:51,206 - INFO - Start of training.
+2024-10-13 00:10:51,206 - INFO - Epoch 1/3
+2024-10-13 00:10:51,206 - INFO - ----------
+2024-10-13 00:14:15,567 - INFO - train Loss: 1.2232 Acc: 0.5769
+2024-10-13 00:15:06,517 - INFO - val Loss: 1.1506 Acc: 0.5845
+2024-10-13 00:15:06,517 - INFO - Epoch complete!
+2024-10-13 00:15:06,517 - INFO - Epoch 2/3
+2024-10-13 00:15:06,517 - INFO - ----------
+2024-10-13 00:18:30,510 - INFO - train Loss: 1.1190 Acc: 0.5862
+2024-10-13 00:19:21,167 - INFO - val Loss: 1.0889 Acc: 0.5905
+2024-10-13 00:19:21,168 - INFO - Epoch complete!
+2024-10-13 00:19:21,168 - INFO - Epoch 3/3
+2024-10-13 00:19:21,168 - INFO - ----------
+2024-10-13 00:22:45,328 - INFO - train Loss: 1.0647 Acc: 0.5956
+2024-10-13 00:23:35,705 - INFO - val Loss: 1.0406 Acc: 0.6091
+2024-10-13 00:23:35,705 - INFO - Epoch complete!
+2024-10-13 00:23:35,789 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241013_000753/trained_model.pth
+2024-10-13 00:23:35,905 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241013_000753/training_curves.png
+2024-10-13 00:24:26,505 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241013_000753/confusion_matrix.png
