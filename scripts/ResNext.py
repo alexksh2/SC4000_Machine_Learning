@@ -22,11 +22,14 @@ from sklearn import model_selection
 from sklearn.utils import resample
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.over_sampling import RandomOverSampler
+
 # IMAGE CONFIGURATIONS
 IMAGE_SIZE = [224, 224]
 
 # TRAINING CONFIGURATIONS
-epochs = 50
+epochs = 30
 batch_size = 128
 
 
@@ -86,7 +89,7 @@ logging.basicConfig(
 
 # Preparing Data
 df_train_data = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/merged_train.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images_filtered_no_duplicates.csv"
 )
 
 # Define the path to your train_images directory
@@ -94,26 +97,6 @@ train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_image
 
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")
-
-class_counts = df_train_data["labels"].value_counts()
-target_count = class_counts.min()
-
-df_train_data = pd.concat(
-    [
-        resample(
-            df_train_data[df_train_data["labels"] == c],
-            replace=False,  # don't sample with replacement
-            n_samples=target_count,  # target number of samples
-            random_state=42,
-        )
-        for c in class_counts.index
-    ]
-)
-
-# Shuffle the dataset after downsampling
-df_train_data = df_train_data.sample(frac=1, random_state=42).reset_index(drop=True)
-
-# df_downsampled.to_csv('downsampled_dataset.csv', index=False)
 
 # Data split
 unique_labels = df_train_data.labels.value_counts()
@@ -151,7 +134,36 @@ proc_aug = transforms.Compose(
         transforms.Normalize(mean=calc_mean, std=calc_std),
     ]
 )
-train_df = ConstDataset(df_train, transform=proc_aug)
+
+desired_majority_class_size = 6000
+
+class_counts = df_train["labels"].value_counts()
+undersample_strategy = {class_counts.idxmax(): desired_majority_class_size}
+
+rus = RandomUnderSampler(sampling_strategy=undersample_strategy, random_state=109)
+X_under, y_under = rus.fit_resample(
+    df_train["image_id"].values.reshape(-1, 1), df_train["labels"].values
+)
+
+desired_minority_class_size = 6000
+
+ros = RandomOverSampler(
+    sampling_strategy={
+        label: desired_minority_class_size
+        for label in class_counts.index
+        if class_counts[label] < desired_minority_class_size
+    },
+    random_state=109,
+)
+X_resampled, y_resampled = ros.fit_resample(X_under, y_under)
+
+df_train_resampled = pd.DataFrame(
+    {"image_id": X_resampled.flatten(), "labels": y_resampled}
+)
+
+df_train_resampled.reset_index(drop=True, inplace=True)
+
+train_df = ConstDataset(df_train_resampled, transform=proc_aug)
 valid_df = ConstDataset(df_valid, transform=proc_aug)
 
 dataloader = {

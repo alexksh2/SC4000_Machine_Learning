@@ -19,6 +19,9 @@ from torch.optim import AdamW
 from sklearn import model_selection
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.over_sampling import RandomOverSampler
+
 # IMAGE CONFIGURATIONS
 IMAGE_SIZE = [224, 224]
 
@@ -84,7 +87,7 @@ logger = logging.getLogger()
 
 # Preparing Data
 df_train_data = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/merged_train.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images_filtered_no_duplicates.csv"
 )
 
 # Define the path to your train_images directory
@@ -141,7 +144,35 @@ val_transforms = transforms.Compose(
     ]
 )
 
-train_df = ConstDataset(df_train, transform=train_transforms)
+desired_majority_class_size = 6000
+
+class_counts = df_train["labels"].value_counts()
+undersample_strategy = {class_counts.idxmax(): desired_majority_class_size}
+
+rus = RandomUnderSampler(sampling_strategy=undersample_strategy, random_state=109)
+X_under, y_under = rus.fit_resample(
+    df_train["image_id"].values.reshape(-1, 1), df_train["labels"].values
+)
+
+desired_minority_class_size = 6000
+
+ros = RandomOverSampler(
+    sampling_strategy={
+        label: desired_minority_class_size
+        for label in class_counts.index
+        if class_counts[label] < desired_minority_class_size
+    },
+    random_state=109,
+)
+X_resampled, y_resampled = ros.fit_resample(X_under, y_under)
+
+df_train_resampled = pd.DataFrame(
+    {"image_id": X_resampled.flatten(), "labels": y_resampled}
+)
+
+df_train_resampled.reset_index(drop=True, inplace=True)
+
+train_df = ConstDataset(df_train_resampled, transform=train_transforms)
 valid_df = ConstDataset(df_valid, transform=val_transforms)
 
 dataloader = {
@@ -179,6 +210,7 @@ args = TrainingArguments(
     metric_for_best_model="accuracy",
     logging_dir=os.path.join(output_dir, "logs"),  # Save logs in the timestamped folder
     remove_unused_columns=False,
+    logging_steps=50,
 )
 
 
