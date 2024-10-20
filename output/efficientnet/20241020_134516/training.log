@@ -1,0 +1,127 @@
+2024-10-20 13:53:39,234 - INFO - Loading pretrained weights from Hugging Face hub (timm/tf_efficientnet_b4.ns_jft_in1k)
+2024-10-20 13:53:39,502 - INFO - [timm/tf_efficientnet_b4.ns_jft_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2024-10-20 13:53:40,467 - INFO - Start of training.
+2024-10-20 13:53:40,467 - INFO - Epoch 1/30
+2024-10-20 14:11:05,751 - INFO - train Loss: 1.3216 Acc: 0.4593
+2024-10-20 14:14:01,305 - INFO - val Loss: 1.0964 Acc: 0.5984
+2024-10-20 14:14:01,305 - INFO - Validation Precision: 0.6533, Recall: 0.5984, F1 Score: 0.6186
+2024-10-20 14:14:01,305 - INFO - Epoch 2/30
+2024-10-20 14:30:48,212 - INFO - train Loss: 1.2118 Acc: 0.5134
+2024-10-20 14:33:54,582 - INFO - val Loss: 1.1134 Acc: 0.5787
+2024-10-20 14:33:54,582 - INFO - Validation Precision: 0.6633, Recall: 0.5787, F1 Score: 0.6068
+2024-10-20 14:33:54,582 - INFO - Epoch 3/30
+2024-10-20 14:50:44,823 - INFO - train Loss: 1.1846 Acc: 0.5243
+2024-10-20 14:53:53,399 - INFO - val Loss: 1.0894 Acc: 0.5893
+2024-10-20 14:53:53,399 - INFO - Validation Precision: 0.6628, Recall: 0.5893, F1 Score: 0.6152
+2024-10-20 14:53:53,399 - INFO - Epoch 4/30
+2024-10-20 15:10:13,218 - INFO - train Loss: 1.1705 Acc: 0.5287
+2024-10-20 15:13:24,838 - INFO - val Loss: 1.1223 Acc: 0.5659
+2024-10-20 15:13:24,838 - INFO - Validation Precision: 0.6677, Recall: 0.5659, F1 Score: 0.5985
+2024-10-20 15:13:24,838 - INFO - Epoch 5/30
+2024-10-20 15:30:13,057 - INFO - train Loss: 1.1571 Acc: 0.5375
+2024-10-20 15:33:18,800 - INFO - val Loss: 1.0978 Acc: 0.5817
+2024-10-20 15:33:18,800 - INFO - Validation Precision: 0.6706, Recall: 0.5817, F1 Score: 0.6109
+2024-10-20 15:33:18,800 - INFO - Epoch 6/30
+2024-10-20 15:50:02,313 - INFO - train Loss: 1.1465 Acc: 0.5389
+2024-10-20 15:53:05,516 - INFO - val Loss: 1.0943 Acc: 0.5819
+2024-10-20 15:53:05,516 - INFO - Validation Precision: 0.6680, Recall: 0.5819, F1 Score: 0.6099
+2024-10-20 15:53:05,516 - INFO - Epoch 7/30
+2024-10-20 16:10:04,104 - INFO - train Loss: 1.1385 Acc: 0.5472
+2024-10-20 16:13:07,953 - INFO - val Loss: 1.0734 Acc: 0.5827
+2024-10-20 16:13:07,953 - INFO - Validation Precision: 0.6651, Recall: 0.5827, F1 Score: 0.6111
+2024-10-20 16:13:07,953 - INFO - Epoch 8/30
+2024-10-20 16:29:19,546 - INFO - train Loss: 1.1359 Acc: 0.5458
+2024-10-20 16:32:28,461 - INFO - val Loss: 1.0936 Acc: 0.5731
+2024-10-20 16:32:28,461 - INFO - Validation Precision: 0.6645, Recall: 0.5731, F1 Score: 0.6039
+2024-10-20 16:32:28,461 - INFO - Epoch 9/30
+2024-10-20 16:48:58,132 - INFO - train Loss: 1.1304 Acc: 0.5509
+2024-10-20 16:51:53,664 - INFO - val Loss: 1.0893 Acc: 0.5880
+2024-10-20 16:51:53,664 - INFO - Validation Precision: 0.6721, Recall: 0.5880, F1 Score: 0.6163
+2024-10-20 16:51:53,664 - INFO - Epoch 10/30
+2024-10-20 17:08:43,513 - INFO - train Loss: 1.1233 Acc: 0.5491
+2024-10-20 17:11:36,785 - INFO - val Loss: 1.0409 Acc: 0.6116
+2024-10-20 17:11:36,785 - INFO - Validation Precision: 0.6713, Recall: 0.6116, F1 Score: 0.6337
+2024-10-20 17:11:36,785 - INFO - Epoch 11/30
+2024-10-20 17:27:20,201 - INFO - train Loss: 1.1149 Acc: 0.5603
+2024-10-20 17:30:14,400 - INFO - val Loss: 1.1084 Acc: 0.5754
+2024-10-20 17:30:14,400 - INFO - Validation Precision: 0.6684, Recall: 0.5754, F1 Score: 0.6056
+2024-10-20 17:30:14,400 - INFO - Epoch 12/30
+2024-10-20 17:46:44,393 - INFO - train Loss: 1.1128 Acc: 0.5621
+2024-10-20 17:49:41,262 - INFO - val Loss: 1.0552 Acc: 0.5931
+2024-10-20 17:49:41,262 - INFO - Validation Precision: 0.6630, Recall: 0.5931, F1 Score: 0.6177
+2024-10-20 17:49:41,262 - INFO - Epoch 13/30
+2024-10-20 18:06:42,336 - INFO - train Loss: 1.1098 Acc: 0.5611
+2024-10-20 18:09:30,486 - INFO - val Loss: 1.0757 Acc: 0.5901
+2024-10-20 18:09:30,486 - INFO - Validation Precision: 0.6603, Recall: 0.5901, F1 Score: 0.6156
+2024-10-20 18:09:30,486 - INFO - Epoch 14/30
+2024-10-20 18:25:30,962 - INFO - train Loss: 1.1104 Acc: 0.5607
+2024-10-20 18:28:16,350 - INFO - val Loss: 1.1122 Acc: 0.5712
+2024-10-20 18:28:16,351 - INFO - Validation Precision: 0.6694, Recall: 0.5712, F1 Score: 0.6029
+2024-10-20 18:28:16,351 - INFO - Epoch 15/30
+2024-10-20 18:44:42,032 - INFO - train Loss: 1.1029 Acc: 0.5606
+2024-10-20 18:47:31,733 - INFO - val Loss: 1.0944 Acc: 0.5889
+2024-10-20 18:47:31,733 - INFO - Validation Precision: 0.6680, Recall: 0.5889, F1 Score: 0.6155
+2024-10-20 18:47:31,733 - INFO - Epoch 16/30
+2024-10-20 19:04:32,740 - INFO - train Loss: 1.0978 Acc: 0.5668
+2024-10-20 19:07:29,671 - INFO - val Loss: 1.0839 Acc: 0.5790
+2024-10-20 19:07:29,671 - INFO - Validation Precision: 0.6648, Recall: 0.5790, F1 Score: 0.6087
+2024-10-20 19:07:29,671 - INFO - Epoch 17/30
+2024-10-20 19:24:04,375 - INFO - train Loss: 1.0972 Acc: 0.5657
+2024-10-20 19:27:13,358 - INFO - val Loss: 1.0808 Acc: 0.5817
+2024-10-20 19:27:13,358 - INFO - Validation Precision: 0.6590, Recall: 0.5817, F1 Score: 0.6089
+2024-10-20 19:27:13,358 - INFO - Epoch 18/30
+2024-10-20 19:43:41,894 - INFO - train Loss: 1.0932 Acc: 0.5693
+2024-10-20 19:46:40,806 - INFO - val Loss: 1.0528 Acc: 0.6049
+2024-10-20 19:46:40,806 - INFO - Validation Precision: 0.6732, Recall: 0.6049, F1 Score: 0.6290
+2024-10-20 19:46:40,806 - INFO - Epoch 19/30
+2024-10-20 20:03:39,326 - INFO - train Loss: 1.0923 Acc: 0.5670
+2024-10-20 20:06:26,694 - INFO - val Loss: 1.0671 Acc: 0.5943
+2024-10-20 20:06:26,694 - INFO - Validation Precision: 0.6698, Recall: 0.5943, F1 Score: 0.6210
+2024-10-20 20:06:26,694 - INFO - Epoch 20/30
+2024-10-20 20:23:05,835 - INFO - train Loss: 1.0903 Acc: 0.5707
+2024-10-20 20:25:58,880 - INFO - val Loss: 1.0779 Acc: 0.5878
+2024-10-20 20:25:58,880 - INFO - Validation Precision: 0.6664, Recall: 0.5878, F1 Score: 0.6152
+2024-10-20 20:25:58,880 - INFO - Epoch 21/30
+2024-10-20 20:43:00,297 - INFO - train Loss: 1.0920 Acc: 0.5712
+2024-10-20 20:45:48,277 - INFO - val Loss: 1.1180 Acc: 0.5749
+2024-10-20 20:45:48,277 - INFO - Validation Precision: 0.6752, Recall: 0.5749, F1 Score: 0.6073
+2024-10-20 20:45:48,277 - INFO - Epoch 22/30
+2024-10-20 21:01:56,195 - INFO - train Loss: 1.0930 Acc: 0.5686
+2024-10-20 21:04:54,805 - INFO - val Loss: 1.1028 Acc: 0.5747
+2024-10-20 21:04:54,805 - INFO - Validation Precision: 0.6674, Recall: 0.5747, F1 Score: 0.6057
+2024-10-20 21:04:54,805 - INFO - Epoch 23/30
+2024-10-20 21:20:59,022 - INFO - train Loss: 1.0864 Acc: 0.5684
+2024-10-20 21:23:55,267 - INFO - val Loss: 1.0942 Acc: 0.5804
+2024-10-20 21:23:55,267 - INFO - Validation Precision: 0.6672, Recall: 0.5804, F1 Score: 0.6095
+2024-10-20 21:23:55,267 - INFO - Epoch 24/30
+2024-10-20 21:39:53,930 - INFO - train Loss: 1.0895 Acc: 0.5694
+2024-10-20 21:42:57,995 - INFO - val Loss: 1.1160 Acc: 0.5703
+2024-10-20 21:42:57,995 - INFO - Validation Precision: 0.6766, Recall: 0.5703, F1 Score: 0.6037
+2024-10-20 21:42:57,995 - INFO - Epoch 25/30
+2024-10-20 22:00:04,852 - INFO - train Loss: 1.0869 Acc: 0.5718
+2024-10-20 22:03:03,613 - INFO - val Loss: 1.0898 Acc: 0.5830
+2024-10-20 22:03:03,613 - INFO - Validation Precision: 0.6625, Recall: 0.5830, F1 Score: 0.6113
+2024-10-20 22:03:03,613 - INFO - Epoch 26/30
+2024-10-20 22:19:26,789 - INFO - train Loss: 1.0826 Acc: 0.5697
+2024-10-20 22:22:27,182 - INFO - val Loss: 1.0619 Acc: 0.5868
+2024-10-20 22:22:27,183 - INFO - Validation Precision: 0.6623, Recall: 0.5868, F1 Score: 0.6137
+2024-10-20 22:22:27,183 - INFO - Epoch 27/30
+2024-10-20 22:38:54,046 - INFO - train Loss: 1.0829 Acc: 0.5729
+2024-10-20 22:41:49,359 - INFO - val Loss: 1.1087 Acc: 0.5859
+2024-10-20 22:41:49,359 - INFO - Validation Precision: 0.6694, Recall: 0.5859, F1 Score: 0.6145
+2024-10-20 22:41:49,360 - INFO - Epoch 28/30
+2024-10-20 22:58:22,928 - INFO - train Loss: 1.0778 Acc: 0.5739
+2024-10-20 23:01:26,621 - INFO - val Loss: 1.0676 Acc: 0.5920
+2024-10-20 23:01:26,621 - INFO - Validation Precision: 0.6643, Recall: 0.5920, F1 Score: 0.6184
+2024-10-20 23:01:26,622 - INFO - Epoch 29/30
+2024-10-20 23:18:26,153 - INFO - train Loss: 1.0808 Acc: 0.5718
+2024-10-20 23:21:26,303 - INFO - val Loss: 1.1027 Acc: 0.5760
+2024-10-20 23:21:26,303 - INFO - Validation Precision: 0.6643, Recall: 0.5760, F1 Score: 0.6064
+2024-10-20 23:21:26,303 - INFO - Epoch 30/30
+2024-10-20 23:34:03,920 - INFO - train Loss: 1.0837 Acc: 0.5740
+2024-10-20 23:34:26,345 - INFO - val Loss: 1.0542 Acc: 0.5982
+2024-10-20 23:34:26,345 - INFO - Validation Precision: 0.6695, Recall: 0.5982, F1 Score: 0.6236
+2024-10-20 23:34:26,345 - INFO - Training complete!
+2024-10-20 23:34:26,433 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241020_134516/trained_model.pth
+2024-10-20 23:34:28,465 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241020_134516/training_curves.png
+2024-10-20 23:34:51,243 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241020_134516/confusion_matrix.png

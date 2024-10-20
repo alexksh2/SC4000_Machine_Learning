@@ -21,7 +21,7 @@ import torch.nn as nn
 
 from sklearn import model_selection
 from sklearn.utils import resample
-from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, f1_score
 
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import RandomOverSampler
@@ -218,6 +218,7 @@ optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr
 
 train_losses, val_losses = [], []
 train_accuracies, val_accuracies = [], []
+val_precisions, val_recalls, val_f1_scores = [], [], []
 
 logging.info("Start of training.")
 
@@ -231,6 +232,9 @@ for epoch in range(epochs):
 
         running_loss = 0.0
         running_corrects = 0
+
+        all_preds = []
+        all_labels = []
 
         for inputs, labels in dataloader[phase]:
             inputs, labels = inputs.to(device), labels.to(device)
@@ -253,6 +257,10 @@ for epoch in range(epochs):
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels)
 
+            if phase == "val":
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(labels.cpu().numpy())
+
         if phase == "train":
             epoch_loss = running_loss / len(train_df)
             epoch_acc = running_corrects.float() / len(train_df)
@@ -264,7 +272,19 @@ for epoch in range(epochs):
             val_losses.append(epoch_loss)
             val_accuracies.append(epoch_acc.item())
 
+            precision = precision_score(all_labels, all_preds, average="weighted")
+            recall = recall_score(all_labels, all_preds, average="weighted")
+            f1 = f1_score(all_labels, all_preds, average="weighted")
+
+            val_precisions.append(precision)
+            val_recalls.append(recall)
+            val_f1_scores.append(f1)
+
         logging.info(f"{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}")
+        if phase == "val":
+            logging.info(
+                f"Validation Precision: {precision:.4f}, Recall: {recall:.4f}, F1 Score: {f1:.4f}"
+            )
 
 logging.info("Training complete!")
 
@@ -274,8 +294,9 @@ torch.save(model.state_dict(), save_path)
 logging.info(f"Model saved to {save_path}")
 
 # Plot and save the training and validation loss curves
-plt.figure(figsize=(10, 5))
-plt.subplot(1, 2, 1)
+plt.figure(figsize=(18, 5))
+
+plt.subplot(1, 3, 1)
 plt.plot(train_losses, label="Training Loss")
 plt.plot(val_losses, label="Validation Loss")
 plt.title("Loss Curves")
@@ -284,12 +305,22 @@ plt.ylabel("Loss")
 plt.legend()
 
 # Plot and save the training and validation accuracy curves
-plt.subplot(1, 2, 2)
+plt.subplot(1, 3, 2)
 plt.plot(train_accuracies, label="Training Accuracy")
 plt.plot(val_accuracies, label="Validation Accuracy")
 plt.title("Accuracy Curves")
 plt.xlabel("Epochs")
 plt.ylabel("Accuracy")
+plt.legend()
+
+# Plot precision, recall, and F1 score for validation phase
+plt.subplot(1, 3, 3)
+plt.plot(val_precisions, label="Validation Precision")
+plt.plot(val_recalls, label="Validation Recall")
+plt.plot(val_f1_scores, label="Validation F1 Score")
+plt.title("Validation Precision, Recall, F1")
+plt.xlabel("Epochs")
+plt.ylabel("Score")
 plt.legend()
 
 # Save the figure
