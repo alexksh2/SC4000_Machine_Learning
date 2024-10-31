@@ -1,38 +1,39 @@
 from datetime import datetime
 import logging
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
 from glob import glob
 import os
 import cv2
+import timm
 from tqdm import tqdm
 
-from transformers import ViTForImageClassification, TrainingArguments, Trainer
 
 import torch
 from torchvision import transforms
 from torch.utils.data import Dataset
-from torch.optim import AdamW
 import torch.optim as optim
-import timm
 import torch.nn as nn
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-from sklearn import model_selection
-from sklearn.utils import resample
-from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, f1_score
-
-from imblearn.under_sampling import RandomUnderSampler
-from imblearn.over_sampling import RandomOverSampler
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    ConfusionMatrixDisplay,
+    fbeta_score,
+    log_loss,
+    precision_score,
+    recall_score,
+    f1_score,
+)
 
 # IMAGE CONFIGURATIONS
-IMAGE_SIZE = [224, 224]
+IMAGE_SIZE = [299, 299]
 
 # TRAINING CONFIGURATIONS
 LEARNING_RATE = 0.001
 MOMENTUM = 0.9
-epochs = 30
+epochs = 2
 batch_size = 128
 
 
@@ -77,7 +78,9 @@ def calc_mean_std(train_df, trainloader):
 
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-output_dir = f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/{timestamp}/"
+output_dir = (
+    f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/{timestamp}/"
+)
 os.makedirs(output_dir, exist_ok=True)
 
 # Create a logger
@@ -87,10 +90,17 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
+logger = logging.getLogger()
 
 # Preparing Data
-df_train_data = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images_filtered_no_duplicates.csv"
+df_train = pd.read_csv(
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_df.csv"
+)
+df_valid = pd.read_csv(
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/valid_df.csv"
+)
+df_test = pd.read_csv(
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df.csv"
 )
 
 # Define the path to your train_images directory
@@ -99,17 +109,9 @@ train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_image
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")
 
-# Data split
-unique_labels = df_train_data.labels.value_counts()
+unique_labels = df_train.labels.value_counts()
 num_unique_labels = unique_labels.index.nunique()
-df_train, df_valid = model_selection.train_test_split(
-    df_train_data,
-    test_size=0.2,
-    random_state=109,
-    stratify=df_train_data["labels"].values,
-)
-df_train.reset_index(drop=True, inplace=True)
-df_valid.reset_index(drop=True, inplace=True)
+
 
 # Preprocessing
 proc_resize = transforms.Compose(
@@ -136,36 +138,10 @@ proc_aug = transforms.Compose(
     ]
 )
 
-desired_majority_class_size = 6000
-
-class_counts = df_train["labels"].value_counts()
-undersample_strategy = {class_counts.idxmax(): desired_majority_class_size}
-
-rus = RandomUnderSampler(sampling_strategy=undersample_strategy, random_state=109)
-X_under, y_under = rus.fit_resample(
-    df_train["image_id"].values.reshape(-1, 1), df_train["labels"].values
-)
-
-desired_minority_class_size = 6000
-
-ros = RandomOverSampler(
-    sampling_strategy={
-        label: desired_minority_class_size
-        for label in class_counts.index
-        if class_counts[label] < desired_minority_class_size
-    },
-    random_state=109,
-)
-X_resampled, y_resampled = ros.fit_resample(X_under, y_under)
-
-df_train_resampled = pd.DataFrame(
-    {"image_id": X_resampled.flatten(), "labels": y_resampled}
-)
-
-df_train_resampled.reset_index(drop=True, inplace=True)
-
-train_df = ConstDataset(df_train_resampled, transform=proc_aug)
+train_df = ConstDataset(df_train, transform=proc_aug)
 valid_df = ConstDataset(df_valid, transform=proc_aug)
+test_df = ConstDataset(df_test, transform=None)
+
 
 dataloader = {
     "train": torch.utils.data.DataLoader(
@@ -173,6 +149,9 @@ dataloader = {
     ),
     "val": torch.utils.data.DataLoader(
         valid_df, batch_size, shuffle=True, num_workers=0
+    ),
+    "test": torch.utils.data.DataLoader(
+        test_df, batch_size, shuffle=True, num_workers=0
     ),
 }
 
@@ -203,10 +182,9 @@ class CustomClassifier(nn.Module):
         return x
 
 
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 model = CustomClassifier(model, num_unique_labels)
-model = model.to(device)
 
+# Unfreeze only the classifier layer
 for name, param in model.named_parameters():
     if "fc" in name or "classifier" in name:  # Adjust for final classification layer
         param.requires_grad = True
@@ -215,34 +193,43 @@ for name, param in model.named_parameters():
 # Define loss and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.001)
+scheduler = ReduceLROnPlateau(
+    optimizer, mode="min", factor=0.2, patience=5, verbose=True, eps=1e-6
+)
+
+device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
+model = model.to(device)
 
 train_losses, val_losses = [], []
 train_accuracies, val_accuracies = [], []
-val_precisions, val_recalls, val_f1_scores = [], [], []
+best_val_loss = float("inf")
+best_val_probs = None  # To store the best validation probabilities
+best_val_labels = None  # To store the corresponding true labels
+best_model_path = os.path.join(output_dir, "best_model.pth")
 
 logging.info("Start of training.")
 
 for epoch in range(epochs):
     logging.info(f"Epoch {epoch+1}/{epochs}")
+    logging.info("-" * 10)
+
+    # Iterate over both training and validation phases
     for phase in ["train", "val"]:
         if phase == "train":
-            model.train()
+            model.train()  # Set the model to training mode
         else:
-            model.eval()
+            model.eval()  # Set the model to evaluation mode
 
         running_loss = 0.0
         running_corrects = 0
-
-        all_preds = []
+        all_probs = []
         all_labels = []
 
+        # Iterate over data
         for inputs, labels in dataloader[phase]:
-            inputs, labels = inputs.to(device), labels.to(device)
+            inputs = inputs.to(device)
+            labels = labels.to(device)
 
-            optimizer.zero_grad()
-            outputs = model(inputs)
-
-            # Handle outputs in tuple form
             if isinstance(outputs, tuple):
                 outputs = outputs[0]
 
@@ -250,53 +237,68 @@ for epoch in range(epochs):
                 _, preds = torch.max(outputs, 1)
                 loss = criterion(outputs, labels)
 
+                # Backward pass and optimization (if in training phase)
                 if phase == "train":
                     loss.backward()
                     optimizer.step()
+                    optimizer.zero_grad()
 
+            if phase == "val":
+                probs = torch.softmax(outputs, dim=1)
+                all_probs.extend(probs.cpu().numpy())
+                all_labels.extend(labels.cpu().numpy())
+
+            # Update running loss and corrects
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels)
 
-            if phase == "val":
-                all_preds.extend(preds.cpu().numpy())
-                all_labels.extend(labels.cpu().numpy())
-
+        # Calculate epoch loss and accuracy
         if phase == "train":
             epoch_loss = running_loss / len(train_df)
-            epoch_acc = running_corrects.float() / len(train_df)
+            epoch_acc = running_corrects.double() / len(train_df)
             train_losses.append(epoch_loss)
             train_accuracies.append(epoch_acc.item())
         else:
             epoch_loss = running_loss / len(valid_df)
-            epoch_acc = running_corrects.float() / len(valid_df)
+            epoch_acc = running_corrects.double() / len(valid_df)
             val_losses.append(epoch_loss)
             val_accuracies.append(epoch_acc.item())
 
-            precision = precision_score(all_labels, all_preds, average="weighted")
-            recall = recall_score(all_labels, all_preds, average="weighted")
-            f1 = f1_score(all_labels, all_preds, average="weighted")
+            scheduler.step(epoch_loss)
 
-            val_precisions.append(precision)
-            val_recalls.append(recall)
-            val_f1_scores.append(f1)
+            if epoch_loss < best_val_loss:
+                best_val_loss = epoch_loss
+                best_val_probs = all_probs  # Save the best probabilities
+                best_val_labels = all_labels  # Save the corresponding true labels
+                # Save best model
+                torch.save(model.state_dict(), best_model_path)
+                logging.info(
+                    f"New best model found at epoch {epoch+1} with validation loss {best_val_loss:.4f}"
+                )
+                logging.info(f"Best model saved at {best_model_path}")
 
         logging.info(f"{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}")
-        if phase == "val":
-            logging.info(
-                f"Validation Precision: {precision:.4f}, Recall: {recall:.4f}, F1 Score: {f1:.4f}"
-            )
 
-logging.info("Training complete!")
+    logging.info("Epoch complete!")
 
 # Save the model's state dictionary
-save_path = os.path.join(output_dir, "trained_model.pth")
+save_path = os.path.join(output_dir, "last.pth")
 torch.save(model.state_dict(), save_path)
 logging.info(f"Model saved to {save_path}")
 
-# Plot and save the training and validation loss curves
-plt.figure(figsize=(18, 5))
+# Save the best validation probabilities to CSV
+best_val_df = pd.DataFrame(
+    best_val_probs, columns=[f"prob_class_{i}" for i in range(len(best_val_probs[0]))]
+)
+best_val_csv_path = os.path.join(output_dir, "best_validation_probabilities.csv")
+best_val_df.to_csv(best_val_csv_path, index=False)
+logging.info(f"Best validation probabilities saved at {best_val_csv_path}")
+print(f"Best validation probabilities saved at {best_val_csv_path}")
 
-plt.subplot(1, 3, 1)
+# Plot and save the training and validation loss curves
+plt.figure(figsize=(12, 6))
+
+plt.subplot(1, 2, 1)
 plt.plot(train_losses, label="Training Loss")
 plt.plot(val_losses, label="Validation Loss")
 plt.title("Loss Curves")
@@ -305,7 +307,7 @@ plt.ylabel("Loss")
 plt.legend()
 
 # Plot and save the training and validation accuracy curves
-plt.subplot(1, 3, 2)
+plt.subplot(1, 2, 2)
 plt.plot(train_accuracies, label="Training Accuracy")
 plt.plot(val_accuracies, label="Validation Accuracy")
 plt.title("Accuracy Curves")
@@ -313,37 +315,55 @@ plt.xlabel("Epochs")
 plt.ylabel("Accuracy")
 plt.legend()
 
-# Plot precision, recall, and F1 score for validation phase
-plt.subplot(1, 3, 3)
-plt.plot(val_precisions, label="Validation Precision")
-plt.plot(val_recalls, label="Validation Recall")
-plt.plot(val_f1_scores, label="Validation F1 Score")
-plt.title("Validation Precision, Recall, F1")
-plt.xlabel("Epochs")
-plt.ylabel("Score")
-plt.legend()
-
 # Save the figure
 training_curves_path = os.path.join(output_dir, "training_curves.png")
 plt.savefig(training_curves_path)
 logging.info(f"Training curves saved at {training_curves_path}")
 
-# Generate confusion matrix
+# Generate confusion matrix for validation data
 model.eval()  # Set model to evaluation mode
 all_preds = []
 all_labels = []
+all_probs = []
 
 with torch.no_grad():
-    for inputs, labels in dataloader["val"]:
+    for inputs, labels in dataloader["test"]:
         inputs, labels = inputs.to(device), labels.to(device)
         outputs = model(inputs)
 
         if isinstance(outputs, tuple):
             outputs = outputs[0]
 
+        # Get predicted probabilities (after softmax)
+        probs = torch.softmax(outputs, dim=1)
+        all_probs.extend(probs.cpu().numpy())
+
         _, preds = torch.max(outputs, 1)
         all_preds.extend(preds.cpu().numpy())
         all_labels.extend(labels.cpu().numpy())
+
+# Compute evaluation metrics
+logloss = log_loss(all_labels, all_probs)
+accuracy = accuracy_score(all_labels, all_preds)
+precision = precision_score(all_labels, all_preds, average="weighted")
+recall = recall_score(all_labels, all_preds, average="weighted")
+f1 = f1_score(all_labels, all_preds, average="weighted")
+f2 = fbeta_score(all_labels, all_preds, beta=2, average="weighted")
+
+# Log the metrics
+logging.info(f"Log Loss: {logloss:.4f}")
+logging.info(f"Accuracy: {accuracy:.4f}")
+logging.info(f"Precision: {precision:.4f}")
+logging.info(f"Recall: {recall:.4f}")
+logging.info(f"F1 Score: {f1:.4f}")
+logging.info(f"F2 Score: {f2:.4f}")
+
+print(f"Log Loss: {logloss:.4f}")
+print(f"Accuracy: {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")
+print(f"F1 Score: {f1:.4f}")
+print(f"F2 Score: {f2:.4f}")
 
 # Compute confusion matrix
 cm = confusion_matrix(all_labels, all_preds)
@@ -353,6 +373,6 @@ labels = sorted(set(all_labels))  # assuming labels are integers
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
 plt.figure(figsize=(10, 10))
 disp.plot(xticks_rotation=45)
-confusion_matrix_path = os.path.join(output_dir, "confusion_matrix.png")
-plt.savefig(confusion_matrix_path)
-logging.info(f"Confusion matrix saved at {confusion_matrix_path}")
+test_confusion_matrix_path = os.path.join(output_dir, "test_confusion_matrix.png")
+plt.savefig(test_confusion_matrix_path)
+logging.info(f"Confusion matrix saved at {test_confusion_matrix_path}")

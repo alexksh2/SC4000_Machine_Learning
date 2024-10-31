@@ -1,4 +1,4 @@
-data
+train_images
 .vscode
 scripts/__pycache__
 *.pt
@@ -7,3 +7,4 @@ scripts/__pycache__
 *.bin
 logs
 *.safetensors
+train_images_old
