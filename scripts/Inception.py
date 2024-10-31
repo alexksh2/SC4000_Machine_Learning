@@ -207,6 +207,8 @@ for epoch in range(epochs):
             inputs = inputs.to(device)
             labels = labels.to(device)
 
+            outputs = model(inputs)
+
             if isinstance(outputs, tuple):
                 outputs = outputs[0]
 
