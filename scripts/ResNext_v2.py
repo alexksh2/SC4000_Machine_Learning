@@ -29,10 +29,10 @@ import timm
 from torch.nn.utils import clip_grad_norm_
 
 # IMAGE CONFIGURATIONS
-IMAGE_SIZE = [512, 512]
+IMAGE_SIZE = [128, 128]
 
 # TRAINING CONFIGURATIONS
-epochs = 2
+epochs = 30
 batch_size = 128
 
 
@@ -55,14 +55,14 @@ class ConstDataset(Dataset):
 
         if self.transform:
             image = self.transform(image)
-        return image, label
+        return image, label, file_name
 
 
 def calc_mean_std(train_df, trainloader):
     psum = torch.tensor([0.0, 0.0, 0.0])
     psum_sq = torch.tensor([0.0, 0.0, 0.0])
 
-    for input_image, _ in tqdm(trainloader):
+    for input_image, _, _ in tqdm(trainloader):
         psum += input_image.sum(axis=[0, 2, 3])
         psum_sq += (input_image**2).sum(axis=[0, 2, 3])
 
@@ -123,6 +123,8 @@ trainloader = torch.utils.data.DataLoader(
     train_df, batch_size, shuffle=True, num_workers=0
 )
 
+calc_mean = 0
+calc_std = 0
 
 calc_mean, calc_std = calc_mean_std(train_df, trainloader)
 
@@ -137,9 +139,17 @@ proc_aug = transforms.Compose(
     ]
 )
 
+test_transform = transforms.Compose(
+    [
+        transforms.ToTensor(),
+        transforms.Resize(size=IMAGE_SIZE),
+        transforms.Normalize(mean=calc_mean, std=calc_std),
+    ]
+)
+
 train_df = ConstDataset(df_train, transform=proc_aug)
 valid_df = ConstDataset(df_valid, transform=proc_aug)
-test_df = ConstDataset(df_test, transform=None)
+test_df = ConstDataset(df_test, transform=test_transform)
 
 
 dataloader = {
@@ -177,11 +187,12 @@ optimizer = AdamW(resnext.parameters(), lr=1e-4, weight_decay=1e-6)
 scheduler = ReduceLROnPlateau(optimizer, mode = 'min', factor = 0.2, patience = 5, verbose = True, eps = 1e-6)
 
 # Move the model to the GPU if available
-device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 resnext = resnext.to(device)
 
 train_losses, val_losses = [], []
 train_accuracies, val_accuracies = [], []
+
 best_val_loss = float("inf")
 best_val_probs = None  # To store the best validation probabilities
 best_val_labels = None  # To store the corresponding true labels
@@ -204,14 +215,19 @@ for epoch in range(epochs):
         running_corrects = 0
         all_probs = []
         all_labels = []
+        all_ids = []
 
         # Iterate over data
-        for inputs, labels in dataloader[phase]:
+        for inputs, labels, filenames in dataloader[phase]:
             inputs = inputs.to(device)
             labels = labels.to(device)
 
+            outputs = resnext(inputs)
+
+            if isinstance(outputs, tuple):
+                outputs = outputs[0]
+
             with torch.set_grad_enabled(phase == "train"):
-                outputs = resnext(inputs)
                 _, preds = torch.max(outputs, 1)
                 loss = criterion(outputs, labels)
 
@@ -224,8 +240,9 @@ for epoch in range(epochs):
 
             if phase == "val":
                 probs = torch.softmax(outputs, dim=1)
-                all_probs.extend(probs.cpu().numpy())
+                all_probs.extend(probs.detach().cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
+                all_ids.extend(filenames)
 
             # Update running loss and corrects
             running_loss += loss.item() * inputs.size(0)
@@ -249,6 +266,7 @@ for epoch in range(epochs):
                 best_val_loss = epoch_loss
                 best_val_probs = all_probs  # Save the best probabilities
                 best_val_labels = all_labels  # Save the corresponding true labels
+                best_image_ids = all_ids
                 # Save best model
                 torch.save(resnext.state_dict(), best_model_path)
                 logging.info(
@@ -269,6 +287,7 @@ logging.info(f"Model saved to {save_path}")
 best_val_df = pd.DataFrame(
     best_val_probs, columns=[f"prob_class_{i}" for i in range(len(best_val_probs[0]))]
 )
+best_val_df["image_id"] = best_image_ids
 best_val_csv_path = os.path.join(output_dir, "best_validation_probabilities.csv")
 best_val_df.to_csv(best_val_csv_path, index=False)
 logging.info(f"Best validation probabilities saved at {best_val_csv_path}")
@@ -306,7 +325,7 @@ all_labels = []
 all_probs = []
 
 with torch.no_grad():
-    for inputs, labels in dataloader["test"]:
+    for inputs, labels, _ in dataloader["test"]:
         inputs, labels = inputs.to(device), labels.to(device)
         outputs = resnext(inputs)
 

@@ -53,14 +53,14 @@ class ConstDataset(Dataset):
 
         if self.transform:
             image = self.transform(image)
-        return image, label
+        return image, label, file_name
 
 
 def calc_mean_std(train_df, trainloader):
     psum = torch.tensor([0.0, 0.0, 0.0])
     psum_sq = torch.tensor([0.0, 0.0, 0.0])
 
-    for input_image, _ in tqdm(trainloader):
+    for input_image, _, _ in tqdm(trainloader):
         psum += input_image.sum(axis=[0, 2, 3])
         psum_sq += (input_image**2).sum(axis=[0, 2, 3])
 
@@ -119,6 +119,8 @@ trainloader = torch.utils.data.DataLoader(
     train_df, batch_size, shuffle=True, num_workers=0
 )
 
+calc_mean = 0
+calc_std = 0
 
 calc_mean, calc_std = calc_mean_std(train_df, trainloader)
 
@@ -144,10 +146,18 @@ val_transforms = transforms.Compose(
     ]
 )
 
+test_transforms = transforms.Compose(
+    [
+        transforms.ToTensor(),
+        transforms.Resize(size=IMAGE_SIZE),
+        transforms.Normalize(mean=calc_mean, std=calc_std),
+    ]
+)
+
 
 train_df = ConstDataset(df_train, transform=train_transforms)
 valid_df = ConstDataset(df_valid, transform=val_transforms)
-test_df = ConstDataset(df_test, transform=None)
+test_df = ConstDataset(df_test, transform=test_transforms)
 
 dataloader = {
     "train": torch.utils.data.DataLoader(
@@ -222,6 +232,7 @@ trainer = Trainer(
 # Train the model
 trainer.train()
 
+val_image_ids = [item[2] for item in valid_df]
 # Predict
 outputs = trainer.predict(valid_df)
 logger.info(f"Prediction metrics: {outputs.metrics}")
@@ -239,6 +250,7 @@ val_prob_df = pd.DataFrame(
     val_probabilities,
     columns=[f"prob_class_{i}" for i in range(val_probabilities.shape[1])],
 )
+val_prob_df["image_id"] = val_image_ids
 
 # Save to CSV
 val_csv_path = os.path.join(output_dir, "validation_probabilities.csv")
