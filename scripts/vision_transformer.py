@@ -30,7 +30,7 @@ from sklearn.metrics import (
 IMAGE_SIZE = [224, 224]
 
 # TRAINING CONFIGURATIONS
-epochs = 2
+epochs = 20
 batch_size = 128
 
 
@@ -258,17 +258,17 @@ val_prob_df.to_csv(val_csv_path, index=False)
 logger.info(f"Validation probabilities saved at {val_csv_path}")
 print(f"Validation probabilities saved at {val_csv_path}")
 
-# Confusion matrix
-labels = np.unique(train_df.labels)
-cm = confusion_matrix(y_true, y_pred, labels=labels)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
+# # Confusion matrix
+# labels = np.unique(train_df.labels)
+# cm = confusion_matrix(y_true, y_pred, labels=labels)
+# disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
 
-# Save confusion matrix plot
-plt.figure(figsize=(10, 10))
-disp.plot(xticks_rotation=45)
-confusion_matrix_path = os.path.join(output_dir, "confusion_matrix.png")
-plt.savefig(confusion_matrix_path)
-logger.info(f"Confusion matrix saved at {confusion_matrix_path}")
+# # Save confusion matrix plot
+# plt.figure(figsize=(10, 10))
+# disp.plot(xticks_rotation=45)
+# confusion_matrix_path = os.path.join(output_dir, "confusion_matrix.png")
+# plt.savefig(confusion_matrix_path)
+# logger.info(f"Confusion matrix saved at {confusion_matrix_path}")
 
 # Plot training & validation loss/accuracy
 history = trainer.state.log_history
@@ -299,6 +299,7 @@ plt.savefig(training_plot_path)
 logger.info(f"Training plots saved at {training_plot_path}")
 
 # Predict on the test set
+test_image_ids = [item[2] for item in test_df]
 test_outputs = trainer.predict(test_df)
 y_test_true = test_outputs.label_ids
 y_test_pred = np.argmax(test_outputs.predictions, axis=1)
@@ -307,6 +308,19 @@ y_test_pred = np.argmax(test_outputs.predictions, axis=1)
 test_probabilities = torch.softmax(
     torch.tensor(test_outputs.predictions), dim=1
 ).numpy()
+
+# Combine probabilities and labels into a DataFrame
+test_prob_df = pd.DataFrame(
+    test_probabilities,
+    columns=[f"prob_class_{i}" for i in range(test_probabilities.shape[1])],
+)
+test_prob_df["image_id"] = test_image_ids
+
+# Save to CSV
+test_csv_path = os.path.join(output_dir, "test_probabilities.csv")
+test_prob_df.to_csv(test_csv_path, index=False)
+logger.info(f"Test probabilities saved at {test_csv_path}")
+print(f"Test probabilities saved at {test_csv_path}")
 
 # Calculate log loss
 test_log_loss = log_loss(y_test_true, test_probabilities)

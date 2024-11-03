@@ -33,7 +33,7 @@ IMAGE_SIZE = [128, 128]
 # TRAINING CONFIGURATIONS
 LEARNING_RATE = 0.001
 MOMENTUM = 0.9
-epochs = 30
+epochs = 20
 batch_size = 128
 
 
@@ -374,9 +374,10 @@ model.eval()  # Set model to evaluation mode
 all_preds = []
 all_labels = []
 all_probs = []
+all_filenames = []
 
 with torch.no_grad():
-    for inputs, labels, _ in dataloader["test"]:
+    for inputs, labels, filenames in dataloader["test"]:
         inputs, labels = inputs.to(device), labels.to(device)
         outputs = model(inputs)
 
@@ -390,6 +391,18 @@ with torch.no_grad():
         _, preds = torch.max(outputs, 1)
         all_preds.extend(preds.cpu().numpy())
         all_labels.extend(labels.cpu().numpy())
+
+        all_filenames.extend(filenames)
+
+
+test_prob_df = pd.DataFrame(
+    all_probs, columns=[f"prob_class_{i}" for i in range(len(all_probs[0]))]
+)
+test_prob_df["Filename"] = all_filenames
+test_csv_path = os.path.join(output_dir, "test_probabilities.csv")
+test_prob_df.to_csv(test_csv_path, index=False)
+logging.info(f"Test probabilities saved at {test_csv_path}")
+print(f"Test probabilities saved at {test_csv_path}")
 
 # Compute evaluation metrics
 logloss = log_loss(all_labels, all_probs)
