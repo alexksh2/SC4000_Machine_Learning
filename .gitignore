@@ -8,4 +8,3 @@ scripts/__pycache__
 logs
 *.safetensors
 train_images_old
-output

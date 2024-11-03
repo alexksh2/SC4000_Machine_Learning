@@ -1,0 +1,27 @@
+2024-11-02 22:04:44,762 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnext50_32x4d.a1h_in1k)
+2024-11-02 22:04:45,006 - INFO - [timm/resnext50_32x4d.a1h_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2024-11-02 22:04:45,195 - INFO - Start of training.
+2024-11-02 22:04:45,195 - INFO - Epoch 1/2
+2024-11-02 22:04:45,195 - INFO - ----------
+2024-11-02 22:07:58,134 - INFO - train Loss: 1.2634 Acc: 0.4775
+2024-11-02 22:09:01,347 - INFO - New best model found at epoch 1 with validation loss 1.0283
+2024-11-02 22:09:01,347 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241102_220235/best_model.pth
+2024-11-02 22:09:01,347 - INFO - val Loss: 1.0283 Acc: 0.5951
+2024-11-02 22:09:01,347 - INFO - Epoch complete!
+2024-11-02 22:09:01,347 - INFO - Epoch 2/2
+2024-11-02 22:09:01,347 - INFO - ----------
+2024-11-02 22:12:17,583 - INFO - train Loss: 0.9063 Acc: 0.6489
+2024-11-02 22:13:07,267 - INFO - New best model found at epoch 2 with validation loss 0.8583
+2024-11-02 22:13:07,267 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241102_220235/best_model.pth
+2024-11-02 22:13:07,267 - INFO - val Loss: 0.8583 Acc: 0.6678
+2024-11-02 22:13:07,267 - INFO - Epoch complete!
+2024-11-02 22:13:07,355 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241102_220235/last.pth
+2024-11-02 22:13:07,431 - INFO - Best validation probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241102_220235/best_validation_probabilities.csv
+2024-11-02 22:13:08,924 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241102_220235/training_curves.png
+2024-11-02 22:13:57,823 - INFO - Log Loss: 0.8655
+2024-11-02 22:13:57,823 - INFO - Accuracy: 0.6658
+2024-11-02 22:13:57,823 - INFO - Precision: 0.6683
+2024-11-02 22:13:57,823 - INFO - Recall: 0.6658
+2024-11-02 22:13:57,823 - INFO - F1 Score: 0.6650
+2024-11-02 22:13:57,823 - INFO - F2 Score: 0.6650
+2024-11-02 22:13:58,113 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241102_220235/test_confusion_matrix.png

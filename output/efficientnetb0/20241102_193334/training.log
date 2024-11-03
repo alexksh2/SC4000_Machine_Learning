@@ -1,0 +1,27 @@
+2024-11-02 19:35:49,237 - INFO - Loading pretrained weights from Hugging Face hub (timm/tf_efficientnet_b0.ns_jft_in1k)
+2024-11-02 19:35:49,497 - INFO - [timm/tf_efficientnet_b0.ns_jft_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2024-11-02 19:35:49,675 - INFO - Start of training.
+2024-11-02 19:35:49,675 - INFO - Epoch 1/2
+2024-11-02 19:35:49,675 - INFO - ----------
+2024-11-02 19:38:56,091 - INFO - train Loss: 1.2890 Acc: 0.4865
+2024-11-02 19:39:53,767 - INFO - New best model found at epoch 1 with validation loss 1.1806
+2024-11-02 19:39:53,767 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241102_193334/best_model.pth
+2024-11-02 19:39:53,767 - INFO - val Loss: 1.1806 Acc: 0.5314
+2024-11-02 19:39:53,767 - INFO - Epoch complete!
+2024-11-02 19:39:53,767 - INFO - Epoch 2/2
+2024-11-02 19:39:53,767 - INFO - ----------
+2024-11-02 19:42:56,394 - INFO - train Loss: 1.1533 Acc: 0.5437
+2024-11-02 19:44:01,391 - INFO - New best model found at epoch 2 with validation loss 1.1408
+2024-11-02 19:44:01,391 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241102_193334/best_model.pth
+2024-11-02 19:44:01,391 - INFO - val Loss: 1.1408 Acc: 0.5466
+2024-11-02 19:44:01,391 - INFO - Epoch complete!
+2024-11-02 19:44:01,422 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241102_193334/last.pth
+2024-11-02 19:44:01,496 - INFO - Best validation probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241102_193334/best_validation_probabilities.csv
+2024-11-02 19:44:02,740 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241102_193334/training_curves.png
+2024-11-02 19:45:12,762 - INFO - Log Loss: 1.6220
+2024-11-02 19:45:12,762 - INFO - Accuracy: 0.2811
+2024-11-02 19:45:12,762 - INFO - Precision: 0.3647
+2024-11-02 19:45:12,762 - INFO - Recall: 0.2811
+2024-11-02 19:45:12,762 - INFO - F1 Score: 0.2538
+2024-11-02 19:45:12,762 - INFO - F2 Score: 0.2639
+2024-11-02 19:45:13,108 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241102_193334/test_confusion_matrix.png
