@@ -13,6 +13,7 @@ from transformers import ViTForImageClassification, TrainingArguments, Trainer
 import torch
 from torchvision import transforms
 from torch.utils.data import Dataset
+import torch.nn.functional as F
 
 from sklearn.metrics import (
     accuracy_score,
@@ -128,12 +129,20 @@ calc_mean, calc_std = calc_mean_std(train_df, trainloader)
 train_transforms = transforms.Compose(
     [
         transforms.ToTensor(),
-        transforms.RandomResizedCrop(IMAGE_SIZE),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomVerticalFlip(),
+        transforms.RandomResizedCrop(384, scale=(0.8, 1.0)),  # Random crop and resize
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.RandomVerticalFlip(p=0.5),
         transforms.RandomRotation(30),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),
-        transforms.Normalize(mean=calc_mean, std=calc_std),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+        transforms.RandomAffine(
+            degrees=15, translate=(0.1, 0.1), scale=(0.9, 1.1)
+        ),  # ShiftScaleRotate equivalent
+        transforms.RandomApply(
+            [transforms.RandomErasing(p=0.5)], p=0.5
+        ),  # Coarse dropout / Cutout equivalent
+        transforms.Normalize(
+            mean=calc_mean, std=calc_std
+        ),  # Use calculated mean and std
     ]
 )
 
@@ -165,8 +174,8 @@ test_transforms = transforms.Compose(
 )
 
 
-train_df = ConstDataset(df_train, transform=proc_aug)
-valid_df = ConstDataset(df_valid, transform=proc_aug)
+train_df = ConstDataset(df_train, transform=train_transforms)
+valid_df = ConstDataset(df_valid, transform=val_transforms)
 test_df = ConstDataset(df_test, transform=test_transforms)
 
 dataloader = {
@@ -193,6 +202,80 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
 
+def bi_tempered_logistic_loss(
+    activations, labels, t1=0.8, t2=1.4, label_smoothing=0.06
+):
+    """
+    Bi-Tempered Logistic Loss with label smoothing.
+
+    Parameters:
+    activations (torch.Tensor): The model outputs (logits).
+    labels (torch.Tensor): The true labels (as indices).
+    t1 (float): Temperature 1 for controlling the log-sum-exp function.
+    t2 (float): Temperature 2 for controlling the normalization function.
+    label_smoothing (float): Label smoothing factor.
+
+    Returns:
+    torch.Tensor: The computed loss.
+    """
+    # Apply label smoothing
+    num_classes = activations.size(1)
+    labels_one_hot = F.one_hot(labels, num_classes=num_classes).float()
+    labels_one_hot = (
+        labels_one_hot * (1 - label_smoothing) + label_smoothing / num_classes
+    )
+
+    # Compute probabilities using tempered softmax
+    probabilities = tempered_softmax(activations, t1)
+
+    # Compute the first term (cross-entropy)
+    term1 = (1 / (1 - t1)) * (1 - torch.pow(probabilities, t1).sum(dim=1))
+
+    # Compute the second term (inner product with smoothed labels)
+    term2 = (1 / (1 - t2)) * (labels_one_hot * (1 - torch.pow(probabilities, t2))).sum(
+        dim=1
+    )
+
+    # Combine terms to get the loss
+    loss = term1 - term2
+    return loss.mean()
+
+
+def tempered_softmax(activations, t):
+    """
+    Tempered softmax function used in Bi-Tempered Logistic Loss.
+
+    Parameters:
+    activations (torch.Tensor): The model outputs (logits).
+    t (float): Temperature parameter.
+
+    Returns:
+    torch.Tensor: Softmax probabilities with temperature scaling.
+    """
+    if t == 1.0:
+        return F.softmax(activations, dim=-1)
+    else:
+        exp_activations = torch.exp(
+            (activations - torch.max(activations, dim=-1, keepdim=True).values)
+            * (1 - t)
+        )
+        normalization = torch.sum(exp_activations, dim=-1, keepdim=True)
+        return exp_activations / normalization
+
+
+class CustomTrainer(Trainer):
+    def compute_loss(self, model, inputs, return_outputs=False):
+        # Forward pass
+        outputs = model(**inputs)
+        logits = outputs.logits
+        labels = inputs.get("labels")
+
+        # Custom loss function: Bi-Tempered Logistic Loss with label smoothing
+        loss = bi_tempered_logistic_loss(logits, labels)
+
+        return (loss, outputs) if return_outputs else loss
+
+
 # Training arguments configuration
 args = TrainingArguments(
     output_dir=output_dir,  # Use timestamped folder
@@ -200,7 +283,7 @@ args = TrainingArguments(
     eval_strategy="epoch",
     save_total_limit=2,  # Limit saved models to only the best and last
     load_best_model_at_end=True,  # Load the best model after training
-    learning_rate=2e-5,
+    learning_rate=1e-4 / 7,  # Adjust initial learning rate with warm-up factor
     per_device_train_batch_size=batch_size,
     per_device_eval_batch_size=batch_size,
     num_train_epochs=epochs,
@@ -209,6 +292,9 @@ args = TrainingArguments(
     logging_dir=os.path.join(output_dir, "logs"),  # Save logs in the timestamped folder
     remove_unused_columns=False,
     logging_steps=50,
+    gradient_accumulation_steps=2,  # For batch accumulation
+    lr_scheduler_type="cosine_with_restarts",  # Cosine annealing scheduler
+    warmup_ratio=0.1,  # Optional: Ratio for warm-up steps
 )
 
 
@@ -229,7 +315,7 @@ def compute_metrics(eval_pred):
 
 
 # Initialize the trainer
-trainer = Trainer(
+trainer = CustomTrainer(
     model=model,
     args=args,
     train_dataset=train_df,
