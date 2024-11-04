@@ -1,0 +1,136 @@
+2024-11-03 21:57:09,870 - INFO - Loading pretrained weights from Hugging Face hub (timm/tf_efficientnet_b4.ns_jft_in1k)
+2024-11-03 21:57:10,116 - INFO - [timm/tf_efficientnet_b4.ns_jft_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2024-11-03 21:57:10,372 - INFO - Start of training.
+2024-11-03 21:57:10,372 - INFO - Epoch 1/20
+2024-11-03 21:57:10,372 - INFO - ----------
+2024-11-03 22:01:58,095 - INFO - train Loss: 1.3159 Acc: 0.4582
+2024-11-03 22:03:14,466 - INFO - New best model found at epoch 1 with validation loss 1.2574
+2024-11-03 22:03:14,466 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:03:14,466 - INFO - val Loss: 1.2574 Acc: 0.4826
+2024-11-03 22:03:14,466 - INFO - Epoch complete!
+2024-11-03 22:03:14,466 - INFO - Epoch 2/20
+2024-11-03 22:03:14,466 - INFO - ----------
+2024-11-03 22:07:30,267 - INFO - train Loss: 1.2295 Acc: 0.4979
+2024-11-03 22:09:01,729 - INFO - New best model found at epoch 2 with validation loss 1.2313
+2024-11-03 22:09:01,729 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:09:01,729 - INFO - val Loss: 1.2313 Acc: 0.4973
+2024-11-03 22:09:01,729 - INFO - Epoch complete!
+2024-11-03 22:09:01,729 - INFO - Epoch 3/20
+2024-11-03 22:09:01,729 - INFO - ----------
+2024-11-03 22:13:45,772 - INFO - train Loss: 1.2099 Acc: 0.5084
+2024-11-03 22:15:08,079 - INFO - New best model found at epoch 3 with validation loss 1.2180
+2024-11-03 22:15:08,080 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:15:08,080 - INFO - val Loss: 1.2180 Acc: 0.5016
+2024-11-03 22:15:08,080 - INFO - Epoch complete!
+2024-11-03 22:15:08,080 - INFO - Epoch 4/20
+2024-11-03 22:15:08,080 - INFO - ----------
+2024-11-03 22:19:40,910 - INFO - train Loss: 1.2019 Acc: 0.5119
+2024-11-03 22:21:03,588 - INFO - New best model found at epoch 4 with validation loss 1.2067
+2024-11-03 22:21:03,588 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:21:03,588 - INFO - val Loss: 1.2067 Acc: 0.5122
+2024-11-03 22:21:03,588 - INFO - Epoch complete!
+2024-11-03 22:21:03,588 - INFO - Epoch 5/20
+2024-11-03 22:21:03,588 - INFO - ----------
+2024-11-03 22:25:36,357 - INFO - train Loss: 1.1928 Acc: 0.5167
+2024-11-03 22:26:58,409 - INFO - val Loss: 1.2151 Acc: 0.5064
+2024-11-03 22:26:58,409 - INFO - Epoch complete!
+2024-11-03 22:26:58,409 - INFO - Epoch 6/20
+2024-11-03 22:26:58,409 - INFO - ----------
+2024-11-03 22:31:31,444 - INFO - train Loss: 1.1867 Acc: 0.5185
+2024-11-03 22:32:47,309 - INFO - New best model found at epoch 6 with validation loss 1.2063
+2024-11-03 22:32:47,309 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:32:47,310 - INFO - val Loss: 1.2063 Acc: 0.5097
+2024-11-03 22:32:47,310 - INFO - Epoch complete!
+2024-11-03 22:32:47,310 - INFO - Epoch 7/20
+2024-11-03 22:32:47,310 - INFO - ----------
+2024-11-03 22:37:00,600 - INFO - train Loss: 1.1808 Acc: 0.5223
+2024-11-03 22:38:30,589 - INFO - New best model found at epoch 7 with validation loss 1.2035
+2024-11-03 22:38:30,589 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:38:30,589 - INFO - val Loss: 1.2035 Acc: 0.5148
+2024-11-03 22:38:30,589 - INFO - Epoch complete!
+2024-11-03 22:38:30,589 - INFO - Epoch 8/20
+2024-11-03 22:38:30,589 - INFO - ----------
+2024-11-03 22:43:13,073 - INFO - train Loss: 1.1802 Acc: 0.5223
+2024-11-03 22:44:35,203 - INFO - New best model found at epoch 8 with validation loss 1.2001
+2024-11-03 22:44:35,203 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:44:35,203 - INFO - val Loss: 1.2001 Acc: 0.5126
+2024-11-03 22:44:35,204 - INFO - Epoch complete!
+2024-11-03 22:44:35,204 - INFO - Epoch 9/20
+2024-11-03 22:44:35,204 - INFO - ----------
+2024-11-03 22:49:07,208 - INFO - train Loss: 1.1748 Acc: 0.5260
+2024-11-03 22:50:30,166 - INFO - New best model found at epoch 9 with validation loss 1.1998
+2024-11-03 22:50:30,166 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 22:50:30,166 - INFO - val Loss: 1.1998 Acc: 0.5156
+2024-11-03 22:50:30,166 - INFO - Epoch complete!
+2024-11-03 22:50:30,166 - INFO - Epoch 10/20
+2024-11-03 22:50:30,166 - INFO - ----------
+2024-11-03 22:55:02,081 - INFO - train Loss: 1.1735 Acc: 0.5260
+2024-11-03 22:56:24,036 - INFO - val Loss: 1.2017 Acc: 0.5147
+2024-11-03 22:56:24,036 - INFO - Epoch complete!
+2024-11-03 22:56:24,036 - INFO - Epoch 11/20
+2024-11-03 22:56:24,036 - INFO - ----------
+2024-11-03 23:00:56,842 - INFO - train Loss: 1.1665 Acc: 0.5300
+2024-11-03 23:02:18,545 - INFO - New best model found at epoch 11 with validation loss 1.1960
+2024-11-03 23:02:18,546 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 23:02:18,546 - INFO - val Loss: 1.1960 Acc: 0.5186
+2024-11-03 23:02:18,546 - INFO - Epoch complete!
+2024-11-03 23:02:18,546 - INFO - Epoch 12/20
+2024-11-03 23:02:18,546 - INFO - ----------
+2024-11-03 23:06:50,567 - INFO - train Loss: 1.1638 Acc: 0.5295
+2024-11-03 23:08:13,434 - INFO - New best model found at epoch 12 with validation loss 1.1946
+2024-11-03 23:08:13,434 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 23:08:13,434 - INFO - val Loss: 1.1946 Acc: 0.5161
+2024-11-03 23:08:13,434 - INFO - Epoch complete!
+2024-11-03 23:08:13,434 - INFO - Epoch 13/20
+2024-11-03 23:08:13,434 - INFO - ----------
+2024-11-03 23:12:47,448 - INFO - train Loss: 1.1633 Acc: 0.5308
+2024-11-03 23:14:09,594 - INFO - val Loss: 1.1975 Acc: 0.5154
+2024-11-03 23:14:09,594 - INFO - Epoch complete!
+2024-11-03 23:14:09,594 - INFO - Epoch 14/20
+2024-11-03 23:14:09,594 - INFO - ----------
+2024-11-03 23:18:42,373 - INFO - train Loss: 1.1662 Acc: 0.5296
+2024-11-03 23:20:04,654 - INFO - val Loss: 1.2076 Acc: 0.5075
+2024-11-03 23:20:04,654 - INFO - Epoch complete!
+2024-11-03 23:20:04,654 - INFO - Epoch 15/20
+2024-11-03 23:20:04,654 - INFO - ----------
+2024-11-03 23:24:39,356 - INFO - train Loss: 1.1623 Acc: 0.5301
+2024-11-03 23:26:01,393 - INFO - New best model found at epoch 15 with validation loss 1.1879
+2024-11-03 23:26:01,393 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_model.pth
+2024-11-03 23:26:01,393 - INFO - val Loss: 1.1879 Acc: 0.5198
+2024-11-03 23:26:01,393 - INFO - Epoch complete!
+2024-11-03 23:26:01,393 - INFO - Epoch 16/20
+2024-11-03 23:26:01,393 - INFO - ----------
+2024-11-03 23:32:46,630 - INFO - train Loss: 1.1596 Acc: 0.5326
+2024-11-03 23:34:13,247 - INFO - val Loss: 1.1919 Acc: 0.5200
+2024-11-03 23:34:13,247 - INFO - Epoch complete!
+2024-11-03 23:34:13,247 - INFO - Epoch 17/20
+2024-11-03 23:34:13,247 - INFO - ----------
+2024-11-03 23:39:00,103 - INFO - train Loss: 1.1613 Acc: 0.5307
+2024-11-03 23:40:26,317 - INFO - val Loss: 1.1934 Acc: 0.5203
+2024-11-03 23:40:26,317 - INFO - Epoch complete!
+2024-11-03 23:40:26,317 - INFO - Epoch 18/20
+2024-11-03 23:40:26,317 - INFO - ----------
+2024-11-03 23:45:13,450 - INFO - train Loss: 1.1570 Acc: 0.5335
+2024-11-03 23:46:41,139 - INFO - val Loss: 1.1950 Acc: 0.5212
+2024-11-03 23:46:41,139 - INFO - Epoch complete!
+2024-11-03 23:46:41,139 - INFO - Epoch 19/20
+2024-11-03 23:46:41,139 - INFO - ----------
+2024-11-03 23:51:28,393 - INFO - train Loss: 1.1545 Acc: 0.5330
+2024-11-03 23:52:55,315 - INFO - val Loss: 1.1928 Acc: 0.5200
+2024-11-03 23:52:55,315 - INFO - Epoch complete!
+2024-11-03 23:52:55,315 - INFO - Epoch 20/20
+2024-11-03 23:52:55,315 - INFO - ----------
+2024-11-03 23:57:42,035 - INFO - train Loss: 1.1549 Acc: 0.5347
+2024-11-03 23:59:10,007 - INFO - val Loss: 1.1916 Acc: 0.5188
+2024-11-03 23:59:10,007 - INFO - Epoch complete!
+2024-11-03 23:59:10,110 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/last.pth
+2024-11-03 23:59:10,194 - INFO - Best validation probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_validation_probabilities.csv
+2024-11-03 23:59:10,359 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/training_curves.png
+2024-11-04 00:00:35,669 - INFO - Test probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/test_probabilities.csv
+2024-11-04 00:00:35,733 - INFO - Log Loss: 1.1902
+2024-11-04 00:00:35,733 - INFO - Accuracy: 0.5186
+2024-11-04 00:00:35,733 - INFO - Precision: 0.5249
+2024-11-04 00:00:35,733 - INFO - Recall: 0.5186
+2024-11-04 00:00:35,733 - INFO - F1 Score: 0.5177
+2024-11-04 00:00:35,733 - INFO - F2 Score: 0.5172
+2024-11-04 00:00:35,833 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/test_confusion_matrix.png
