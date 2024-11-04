@@ -81,3 +81,52 @@
 2024-11-04 15:36:25,895 - INFO - Epoch 14/20
 2024-11-04 15:36:25,895 - INFO - ----------
 2024-11-04 15:40:52,980 - INFO - train Loss: 1.5229 Acc: 0.2871
+2024-11-04 15:42:53,051 - INFO - New best model found at epoch 14 with validation loss 1.5080
+2024-11-04 15:42:53,051 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_model.pth
+2024-11-04 15:42:53,051 - INFO - val Loss: 1.5080 Acc: 0.2930
+2024-11-04 15:42:53,051 - INFO - Epoch complete!
+2024-11-04 15:42:53,051 - INFO - Epoch 15/20
+2024-11-04 15:42:53,051 - INFO - ----------
+2024-11-04 15:48:06,226 - INFO - train Loss: 1.5245 Acc: 0.2895
+2024-11-04 15:49:04,839 - INFO - New best model found at epoch 15 with validation loss 1.5070
+2024-11-04 15:49:04,839 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_model.pth
+2024-11-04 15:49:04,839 - INFO - val Loss: 1.5070 Acc: 0.3034
+2024-11-04 15:49:04,839 - INFO - Epoch complete!
+2024-11-04 15:49:04,839 - INFO - Epoch 16/20
+2024-11-04 15:49:04,839 - INFO - ----------
+2024-11-04 15:51:58,866 - INFO - train Loss: 1.5236 Acc: 0.2877
+2024-11-04 15:52:56,597 - INFO - val Loss: 1.5077 Acc: 0.3066
+2024-11-04 15:52:56,597 - INFO - Epoch complete!
+2024-11-04 15:52:56,597 - INFO - Epoch 17/20
+2024-11-04 15:52:56,597 - INFO - ----------
+2024-11-04 15:55:53,276 - INFO - train Loss: 1.5157 Acc: 0.2955
+2024-11-04 15:56:51,930 - INFO - val Loss: 1.5260 Acc: 0.2868
+2024-11-04 15:56:51,931 - INFO - Epoch complete!
+2024-11-04 15:56:51,931 - INFO - Epoch 18/20
+2024-11-04 15:56:51,931 - INFO - ----------
+2024-11-04 15:59:45,082 - INFO - train Loss: 1.5195 Acc: 0.2924
+2024-11-04 16:00:44,106 - INFO - val Loss: 1.5130 Acc: 0.2945
+2024-11-04 16:00:44,106 - INFO - Epoch complete!
+2024-11-04 16:00:44,106 - INFO - Epoch 19/20
+2024-11-04 16:00:44,106 - INFO - ----------
+2024-11-04 16:03:39,735 - INFO - train Loss: 1.5222 Acc: 0.2883
+2024-11-04 16:04:37,034 - INFO - New best model found at epoch 19 with validation loss 1.5028
+2024-11-04 16:04:37,034 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_model.pth
+2024-11-04 16:04:37,034 - INFO - val Loss: 1.5028 Acc: 0.3060
+2024-11-04 16:04:37,034 - INFO - Epoch complete!
+2024-11-04 16:04:37,034 - INFO - Epoch 20/20
+2024-11-04 16:04:37,034 - INFO - ----------
+2024-11-04 16:06:58,711 - INFO - train Loss: 1.5145 Acc: 0.2980
+2024-11-04 16:07:43,487 - INFO - val Loss: 1.5134 Acc: 0.2999
+2024-11-04 16:07:43,487 - INFO - Epoch complete!
+2024-11-04 16:07:43,612 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/last.pth
+2024-11-04 16:07:43,688 - INFO - Best validation probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_validation_probabilities.csv
+2024-11-04 16:07:43,821 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/training_curves.png
+2024-11-04 16:08:27,992 - INFO - Test probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_probabilities.csv
+2024-11-04 16:08:28,045 - INFO - Log Loss: 1.5142
+2024-11-04 16:08:28,045 - INFO - Accuracy: 0.2964
+2024-11-04 16:08:28,045 - INFO - Precision: 0.3113
+2024-11-04 16:08:28,045 - INFO - Recall: 0.2964
+2024-11-04 16:08:28,045 - INFO - F1 Score: 0.2691
+2024-11-04 16:08:28,045 - INFO - F2 Score: 0.2809
+2024-11-04 16:08:28,129 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_confusion_matrix.png

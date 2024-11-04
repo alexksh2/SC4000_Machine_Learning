@@ -88,3 +88,43 @@
 2024-11-04 15:36:08,843 - INFO - Epoch 15/20
 2024-11-04 15:36:08,843 - INFO - ----------
 2024-11-04 15:40:34,126 - INFO - train Loss: 1.4105 Acc: 0.3810
+2024-11-04 15:42:11,879 - INFO - val Loss: 1.4675 Acc: 0.3478
+2024-11-04 15:42:11,879 - INFO - Epoch complete!
+2024-11-04 15:42:11,879 - INFO - Epoch 16/20
+2024-11-04 15:42:11,879 - INFO - ----------
+2024-11-04 15:47:26,342 - INFO - train Loss: 1.4023 Acc: 0.3859
+2024-11-04 15:48:31,992 - INFO - New best model found at epoch 16 with validation loss 1.4446
+2024-11-04 15:48:31,992 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_model.pth
+2024-11-04 15:48:31,992 - INFO - val Loss: 1.4446 Acc: 0.3607
+2024-11-04 15:48:31,992 - INFO - Epoch complete!
+2024-11-04 15:48:31,992 - INFO - Epoch 17/20
+2024-11-04 15:48:31,992 - INFO - ----------
+2024-11-04 15:51:24,930 - INFO - train Loss: 1.3901 Acc: 0.3938
+2024-11-04 15:52:22,521 - INFO - val Loss: 1.4590 Acc: 0.3530
+2024-11-04 15:52:22,521 - INFO - Epoch complete!
+2024-11-04 15:52:22,521 - INFO - Epoch 18/20
+2024-11-04 15:52:22,521 - INFO - ----------
+2024-11-04 15:55:13,988 - INFO - train Loss: 1.3931 Acc: 0.3948
+2024-11-04 15:56:12,625 - INFO - val Loss: 1.4537 Acc: 0.3532
+2024-11-04 15:56:12,625 - INFO - Epoch complete!
+2024-11-04 15:56:12,625 - INFO - Epoch 19/20
+2024-11-04 15:56:12,625 - INFO - ----------
+2024-11-04 15:59:07,953 - INFO - train Loss: 1.3910 Acc: 0.3945
+2024-11-04 16:00:06,075 - INFO - val Loss: 1.4949 Acc: 0.3347
+2024-11-04 16:00:06,075 - INFO - Epoch complete!
+2024-11-04 16:00:06,075 - INFO - Epoch 20/20
+2024-11-04 16:00:06,075 - INFO - ----------
+2024-11-04 16:02:57,437 - INFO - train Loss: 1.3825 Acc: 0.3995
+2024-11-04 16:03:55,636 - INFO - val Loss: 1.4551 Acc: 0.3566
+2024-11-04 16:03:55,636 - INFO - Epoch complete!
+2024-11-04 16:03:55,649 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/last.pth
+2024-11-04 16:03:55,728 - INFO - Best validation probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_validation_probabilities.csv
+2024-11-04 16:03:55,893 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/training_curves.png
+2024-11-04 16:04:53,770 - INFO - Test probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_probabilities.csv
+2024-11-04 16:04:53,821 - INFO - Log Loss: 1.4562
+2024-11-04 16:04:53,821 - INFO - Accuracy: 0.3571
+2024-11-04 16:04:53,821 - INFO - Precision: 0.3648
+2024-11-04 16:04:53,821 - INFO - Recall: 0.3571
+2024-11-04 16:04:53,821 - INFO - F1 Score: 0.3267
+2024-11-04 16:04:53,821 - INFO - F2 Score: 0.3394
+2024-11-04 16:04:53,911 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_confusion_matrix.png
