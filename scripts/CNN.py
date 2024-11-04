@@ -216,7 +216,7 @@ for name, param in model.named_parameters():
         param.requires_grad = False
 
 
-device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
 train_losses, val_losses = [], []

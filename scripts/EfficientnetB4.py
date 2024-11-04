@@ -207,7 +207,7 @@ scheduler = ReduceLROnPlateau(
     optimizer, mode="min", factor=0.2, patience=5, verbose=True, eps=1e-6
 )
 
-device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
 train_losses, val_losses = [], []
