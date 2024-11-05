@@ -1,0 +1,12 @@
+2024-11-05 21:39:49,995 - INFO - Fold 1 completed with best iteration: 506
+2024-11-05 21:39:52,347 - INFO - Fold 2 completed with best iteration: 446
+2024-11-05 21:39:54,425 - INFO - Fold 3 completed with best iteration: 381
+2024-11-05 21:39:55,881 - INFO - Fold 4 completed with best iteration: 233
+2024-11-05 21:39:58,489 - INFO - Fold 5 completed with best iteration: 510
+2024-11-05 21:39:58,490 - INFO - Final number of boosting rounds for training: 415
+2024-11-05 21:40:02,821 - INFO - Ensemble Test Accuracy: 0.90000000
+2024-11-05 21:40:02,821 - INFO - Ensemble Test Precision: 0.90010525
+2024-11-05 21:40:02,821 - INFO - Ensemble Test Recall: 0.90000000
+2024-11-05 21:40:02,821 - INFO - Ensemble Test F1 Score: 0.89985471
+2024-11-05 21:40:02,821 - INFO - Ensemble Test F2 Score: 0.89989460
+2024-11-05 21:40:02,948 - INFO - Final model saved.

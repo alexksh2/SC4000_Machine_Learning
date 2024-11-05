@@ -1,5 +1,6 @@
 import numpy as np
 import lightgbm as lgb
+from lightgbm import early_stopping
 import pandas as pd
 from sklearn.metrics import (
     accuracy_score,
@@ -29,30 +30,67 @@ logging.basicConfig(
 )
 logger = logging.getLogger()
 
-# Sample individual model predictions (replace with actual data)
-cnn_val_preds = np.random.rand(100, 10)
-alexnet_val_preds = np.random.rand(100, 10)
-efficientnet_val_preds = np.random.rand(100, 10)
-inception_val_preds = np.random.rand(100, 10)
-resnet_val_preds = np.random.rand(100, 10)
-resnext_val_preds = np.random.rand(100, 10)
-vit_val_preds = np.random.rand(100, 10)
+# List of CSV files containing individual model predictions
+val_csv_files = [
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241103_232814/best_validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241103_190631/validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/best_validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/best_validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/best_validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4_v2/20241104_004159/best_validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/best_validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_validation_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_validation_probabilities.csv",
+]
 
-# Stack validation predictions and labels
-X_val = np.hstack(
-    (
-        cnn_val_preds,
-        alexnet_val_preds,
-        efficientnet_val_preds,
-        inception_val_preds,
-        resnet_val_preds,
-        resnext_val_preds,
-        vit_val_preds,
-    )
+test_csv_files = [
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241103_232814/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241103_190631/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4/20241103_215449/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4_v2/20241104_004159/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_probabilities.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_probabilities.csv",
+]
+
+valid_df = pd.read_csv(
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/valid_df.csv"
 )
-y_val = np.random.randint(0, 10, 100)  # Replace with actual validation labels
 
-# Set up LightGBM dataset
+test_df = pd.read_csv(
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df.csv"
+)
+
+
+# Merge the CSV files
+for i, file in enumerate(val_csv_files):
+    df = pd.read_csv(file)
+
+    if i == 0:
+        merged_df = df
+        # Move the image_id column to the first position
+        image_name = merged_df.columns[-1]
+        merged_df = merged_df[[image_name] + merged_df.columns[:-1].tolist()]
+
+        # Merge with true labels
+        merged_df = merged_df.merge(valid_df, on="image_id", how="left")
+    else:
+        # Merge subsequent prediction files
+        merged_df = merged_df.merge(
+            df, on="image_id", how="left", suffixes=("", f"_model{i+1}")
+        )
+
+# Extract features and labels
+X_val = merged_df.drop(
+    columns=["image_id", "labels"]
+).values
+y_val = merged_df["labels"].values
+
+# Convert to LightGBM dataset format
 train_data = lgb.Dataset(X_val, label=y_val)
 
 # LightGBM parameters
@@ -64,7 +102,6 @@ params = {
     "learning_rate": 0.01,
     "min_data_in_leaf": 20,
     "verbose": -1,
-    "n_estimators": 10000,
     "num_leaves": 10,
     "max_depth": 5,
     "subsample": 0.3,
@@ -77,32 +114,33 @@ params = {
 }
 
 # Perform 5-fold cross-validation with LightGBM
-fold_accuracies = []
+evals_result = {}
 cv_results = lgb.cv(
     params,
     train_data,
-    num_boost_round=100,
+    num_boost_round=1000,
     nfold=5,
     stratified=True,
     shuffle=True,
     metrics="multi_logloss",
-    early_stopping_rounds=10,
-    verbose_eval=10,
     seed=42,
-    callbacks=[lgb.record_evaluation(fold_accuracies)],  # Track accuracy for each fold
+    callbacks=[
+        early_stopping(stopping_rounds=10),
+        lgb.record_evaluation(evals_result),
+    ],  # Track accuracy for each fold
 )
 
-# Accuracy for each fold
-for i, acc in enumerate(fold_accuracies):
-    logger.info(f"Fold {i+1} Accuracy: {acc['multi_logloss-mean'][-1]:.4f}")
-    print(f"Fold {i+1} Accuracy: {acc['multi_logloss-mean'][-1]:.4f}")
+# # Print or log detailed cross-validation results
+# print("Detailed cross-validation results:")
+# for metric_name, metric_results in evals_result.items():
+#     for key, values in metric_results.items():
+#         print(f"{key}: Last recorded value = {values[-1]:.4f}")
+#         logger.info(f"{key}: Last recorded value = {values[-1]:.4f}")
 
-# Best number of boosting rounds
-best_num_boost_round = len(cv_results["multi_logloss-mean"])
-logger.info(f"Best number of boosting rounds from CV: {best_num_boost_round}")
+
 
 # Train final model with optimal rounds
-gbm = lgb.train(params, train_data, num_boost_round=best_num_boost_round)
+gbm = lgb.train(params, train_data, 834)
 
 # Feature Importance
 feature_importance = gbm.feature_importance()
@@ -113,10 +151,10 @@ importance_df = pd.DataFrame(
 importance_df = importance_df.sort_values(by="Importance", ascending=False)
 
 # Log feature importance
-logger.info("Feature Importance:")
-for index, row in importance_df.iterrows():
-    logger.info(f"{row['Feature']}: {row['Importance']}")
-    print(f"{row['Feature']}: {row['Importance']}")
+# logger.info("Feature Importance:")
+# for index, row in importance_df.iterrows():
+#     logger.info(f"{row['Feature']}: {row['Importance']}")
+#     print(f"{row['Feature']}: {row['Importance']}")
 
 # Plot feature importance
 plt.figure(figsize=(10, 8))
@@ -128,33 +166,35 @@ plt.gca().invert_yaxis()
 # Save the plot
 plt.savefig(os.path.join(output_dir, "feature_importance.png"))
 
-# Test data
-cnn_test_preds = np.random.rand(50, 10)
-alexnet_test_preds = np.random.rand(50, 10)
-efficientnet_test_preds = np.random.rand(50, 10)
-inception_test_preds = np.random.rand(50, 10)
-resnet_test_preds = np.random.rand(50, 10)
-resnext_test_preds = np.random.rand(50, 10)
-vit_test_preds = np.random.rand(50, 10)
+# Merge the CSV files
+for i, file in enumerate(test_csv_files):
+    df = pd.read_csv(file)
 
-# Stack test predictions
-X_test = np.hstack(
-    (
-        cnn_test_preds,
-        alexnet_test_preds,
-        efficientnet_test_preds,
-        inception_test_preds,
-        resnet_test_preds,
-        resnext_test_preds,
-        vit_test_preds,
-    )
-)
+    if "Filename" in df.columns:
+        df = df.rename(columns={"Filename": "image_id"})
+
+    if i == 0:
+        test_merged_df = df
+        # Move the image_id column to the first position
+        image_name = test_merged_df.columns[-1]
+        test_merged_df = test_merged_df[
+            [image_name] + test_merged_df.columns[:-1].tolist()
+        ]
+
+        # Merge with true labels
+        test_merged_df = test_merged_df.merge(test_df, on="image_id", how="left")
+    else:
+        # Merge subsequent prediction files
+        test_merged_df = test_merged_df.merge(
+            df, on="image_id", how="left", suffixes=("", f"_model{i+1}")
+        )
+
+# Extract features and labels
+X_test = test_merged_df.drop(columns=["image_id", "labels"]).values
+y_test = test_merged_df["labels"].values
 
 # Predict with the LightGBM meta-model on the test set
 final_predictions = np.argmax(gbm.predict(X_test), axis=1)
-
-# True labels for test set
-y_test = np.random.randint(0, 10, 50)  # Replace with actual test labels
 
 # Calculate metrics
 accuracy = accuracy_score(y_test, final_predictions)
@@ -164,18 +204,18 @@ f1 = f1_score(y_test, final_predictions, average="weighted")
 f2 = fbeta_score(y_test, final_predictions, beta=2, average="weighted")
 
 # Log results
-logger.info(f"Ensemble Test Accuracy: {accuracy:.4f}")
-logger.info(f"Ensemble Test Precision: {precision:.4f}")
-logger.info(f"Ensemble Test Recall: {recall:.4f}")
-logger.info(f"Ensemble Test F1 Score: {f1:.4f}")
-logger.info(f"Ensemble Test F2 Score: {f2:.4f}")
+logger.info(f"Ensemble Test Accuracy: {accuracy:.8f}")
+logger.info(f"Ensemble Test Precision: {precision:.8f}")
+logger.info(f"Ensemble Test Recall: {recall:.8f}")
+logger.info(f"Ensemble Test F1 Score: {f1:.8f}")
+logger.info(f"Ensemble Test F2 Score: {f2:.8f}")
 
 # Print logged metrics for reference
-print(f"Accuracy: {accuracy:.4f}")
-print(f"Precision: {precision:.4f}")
-print(f"Recall: {recall:.4f}")
-print(f"F1 Score: {f1:.4f}")
-print(f"F2 Score: {f2:.4f}")
+print(f"Accuracy: {accuracy:.8f}")
+print(f"Precision: {precision:.8f}")
+print(f"Recall: {recall:.8f}")
+print(f"F1 Score: {f1:.8f}")
+print(f"F2 Score: {f2:.8f}")
 
 # Confusion Matrix
 cm = confusion_matrix(y_test, final_predictions)
