@@ -16,7 +16,7 @@ from torch.utils.data import Dataset
 import torch.optim as optim
 import torch.nn as nn
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
-
+from sklearn.model_selection import KFold
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
@@ -32,8 +32,13 @@ from sklearn.metrics import (
 IMAGE_SIZE = [512, 512]
 LEARNING_RATE_MAX = 0.0002
 LEARNING_RATE_MIN = 1e-6
+FOLDS = 5
+DROP_CONNECT_RATE = 0.4
 epochs = 20
 batch_size = 128
+
+
+
 
 
 class ConstDataset(Dataset):
@@ -129,18 +134,22 @@ calc_mean, calc_std = calc_mean_std(train_df, trainloader)
 # Data augmentation
 proc_aug = transforms.Compose(
     [
-        transforms.ToTensor(),
-        transforms.Resize(size=IMAGE_SIZE),
-        transforms.RandomVerticalFlip(p=0.5),
+        transforms.ToPILImage(),
         transforms.RandomHorizontalFlip(p=0.5),
+        transforms.RandomVerticalFlip(p=0.5),
+        transforms.RandomRotation(15),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+        transforms.RandomResizedCrop(IMAGE_SIZE),
+        transforms.ToTensor(),
         transforms.Normalize(mean=calc_mean, std=calc_std),
     ]
 )
 
 test_transform = transforms.Compose(
     [
+        transforms.ToPILImage(),
+        transforms.Resize(IMAGE_SIZE),
         transforms.ToTensor(),
-        transforms.Resize(size=IMAGE_SIZE),
         transforms.Normalize(mean=calc_mean, std=calc_std),
     ]
 )
@@ -163,6 +172,26 @@ dataloader = {
 }
 
 
+class SigmoidFocalLoss(nn.Module):
+    def __init__(self, gamma=2.0, alpha=0.25, label_smoothing=0.1):
+        super(SigmoidFocalLoss, self).__init__()
+        self.gamma = gamma
+        self.alpha = alpha
+        self.label_smoothing = label_smoothing
+
+    def forward(self, inputs, targets):
+        targets = targets.float()
+        inputs = inputs.float()
+        inputs = inputs.clamp(min=1e-8, max=1 - 1e-8)
+        
+        focal_weight = torch.pow(1 - inputs, self.gamma) * targets + inputs * (1 - targets)
+        bce_loss = -(
+            self.alpha * (targets * torch.log(inputs)) +
+            (1 - self.alpha) * ((1 - targets) * torch.log(1 - inputs))
+        )
+        return focal_weight * bce_loss.mean()
+    
+    
 class CustomClassifier(nn.Module):
     def __init__(self, model, num_unique_labels):
         super(CustomClassifier, self).__init__()
@@ -191,7 +220,7 @@ for name, param in model.named_parameters():
         param.requires_grad = False
 
 
-criterion = nn.CrossEntropyLoss()
+criterion = SigmoidFocalLoss(gamma=2.0, alpha=0.25, label_smoothing=0.1)
 optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARNING_RATE_MAX)
 scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=1, eta_min=LEARNING_RATE_MIN)
 
@@ -206,6 +235,11 @@ best_val_labels = None  # To store the corresponding true labels
 best_model_path = os.path.join(output_dir, "best_model.pth")
 
 logging.info("Start of training.")
+
+
+
+
+
 
 for epoch in range(epochs):
     logging.info(f"Epoch {epoch+1}/{epochs}")
