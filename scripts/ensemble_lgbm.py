@@ -42,6 +42,7 @@ val_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241109_181431/validation_inference_results.csv",
 ]
 
 test_csv_files = [
@@ -55,6 +56,7 @@ test_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241109_181431/validation_inference_results.csv",
 ]
 
 valid_df = pd.read_csv(
@@ -136,7 +138,6 @@ cv_results = lgb.cv(
 #     for key, values in metric_results.items():
 #         print(f"{key}: Last recorded value = {values[-1]:.4f}")
 #         logger.info(f"{key}: Last recorded value = {values[-1]:.4f}")
-
 
 
 # Train final model with optimal rounds
