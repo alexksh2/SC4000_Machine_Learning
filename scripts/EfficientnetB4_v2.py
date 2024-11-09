@@ -82,7 +82,7 @@ def calc_mean_std(train_df, trainloader):
 
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-output_dir = f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb4_v2/{timestamp}/"
+output_dir = f"/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project_Git/SC4000_Machine_Learning/output/efficientnetb4_v2/{timestamp}/"
 os.makedirs(output_dir, exist_ok=True)
 
 # Create a logger
@@ -96,17 +96,17 @@ logger = logging.getLogger()
 
 # Preparing Data
 df_train = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_df.csv"
+    "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project_Git/SC4000_Machine_Learning/data/train_df.csv"
 )
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/valid_df.csv"
+    "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project_Git/SC4000_Machine_Learning/data/valid_df.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df.csv"
+    "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project_Git/SC4000_Machine_Learning/data/test_df.csv"
 )
 
 # Define the path to your train_images directory
-train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images"
+train_path = "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_duplicate/train_images"
 
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")
@@ -171,7 +171,6 @@ dataloader = {
     ),
 }
 
-
 class SigmoidFocalLoss(nn.Module):
     def __init__(self, gamma=2.0, alpha=0.25, label_smoothing=0.1):
         super(SigmoidFocalLoss, self).__init__()
@@ -180,17 +179,23 @@ class SigmoidFocalLoss(nn.Module):
         self.label_smoothing = label_smoothing
 
     def forward(self, inputs, targets):
-        targets = targets.float()
-        inputs = inputs.float()
-        inputs = inputs.clamp(min=1e-8, max=1 - 1e-8)
+        # Convert targets to one-hot format
+        targets_one_hot = torch.nn.functional.one_hot(targets, num_classes=inputs.size(1)).float()
         
-        focal_weight = torch.pow(1 - inputs, self.gamma) * targets + inputs * (1 - targets)
+        # Apply label smoothing
+        targets_one_hot = targets_one_hot * (1 - self.label_smoothing) + 0.5 * self.label_smoothing
+        
+        # Calculate focal weight
+        focal_weight = torch.pow(1 - inputs, self.gamma) * targets_one_hot + inputs * (1 - targets_one_hot)
+        
+        # Calculate the BCE loss with focal weight
         bce_loss = -(
-            self.alpha * (targets * torch.log(inputs)) +
-            (1 - self.alpha) * ((1 - targets) * torch.log(1 - inputs))
+            self.alpha * (targets_one_hot * torch.log(inputs)) +
+            (1 - self.alpha) * ((1 - targets_one_hot) * torch.log(1 - inputs))
         )
-        return focal_weight * bce_loss.mean()
-    
+        
+        return (focal_weight * bce_loss).mean()
+
     
 class CustomClassifier(nn.Module):
     def __init__(self, model, num_unique_labels):
@@ -224,7 +229,8 @@ criterion = SigmoidFocalLoss(gamma=2.0, alpha=0.25, label_smoothing=0.1)
 optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARNING_RATE_MAX)
 scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=1, eta_min=LEARNING_RATE_MIN)
 
-device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
+device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+#device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
 train_losses, val_losses = [], []
@@ -235,10 +241,6 @@ best_val_labels = None  # To store the corresponding true labels
 best_model_path = os.path.join(output_dir, "best_model.pth")
 
 logging.info("Start of training.")
-
-
-
-
 
 
 for epoch in range(epochs):
@@ -291,12 +293,14 @@ for epoch in range(epochs):
         # Calculate epoch loss and accuracy
         if phase == "train":
             epoch_loss = running_loss / len(train_df)
-            epoch_acc = running_corrects.double() / len(train_df)
+            #epoch_acc = running_corrects.double() / len(train_df)
+            epoch_acc = running_corrects.to(torch.float32)/ len(train_df)
             train_losses.append(epoch_loss)
             train_accuracies.append(epoch_acc.item())
         else:
             epoch_loss = running_loss / len(valid_df)
-            epoch_acc = running_corrects.double() / len(valid_df)
+            #epoch_acc = running_corrects.double() / len(valid_df)
+            epoch_acc = running_corrects.to(torch.float32)/ len(valid_df)
             val_losses.append(epoch_loss)
             val_accuracies.append(epoch_acc.item())
 

@@ -1,0 +1,5 @@
+2024-11-09 11:15:39,454 - INFO - Loading pretrained weights from Hugging Face hub (timm/tf_efficientnet_b4.ns_jft_in1k)
+2024-11-09 11:15:39,957 - INFO - [timm/tf_efficientnet_b4.ns_jft_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2024-11-09 11:15:40,236 - INFO - Start of training.
+2024-11-09 11:15:40,236 - INFO - Epoch 1/20
+2024-11-09 11:15:40,236 - INFO - ----------
