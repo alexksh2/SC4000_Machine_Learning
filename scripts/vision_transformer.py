@@ -183,6 +183,7 @@ dataloader = {
 
 # Training model
 model_name = "google/vit-base-patch16-224"
+# model_name = "google/vit-huge-patch14-224-in21k"
 num_classes = num_unique_labels
 
 model = ViTForImageClassification.from_pretrained(
