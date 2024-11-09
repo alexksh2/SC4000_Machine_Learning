@@ -94,7 +94,7 @@ def run_inference(dataset_df, dataset_name):
     # Save probabilities and predictions to CSV
     results_df = pd.DataFrame(pred_probs, columns=[f"prob_class_{i}" for i in range(5)])
     results_df["image_id"] = image_ids
-    results_df["predicted_label"] = pred_labels
+    # results_df["predicted_label"] = pred_labels
     results_path = os.path.join(output_dir, f"{dataset_name}_inference_results.csv")
     results_df.to_csv(results_path, index=False)
     print(f"{dataset_name} inference results saved at {results_path}")
