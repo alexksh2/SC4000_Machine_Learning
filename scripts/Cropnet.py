@@ -121,3 +121,10 @@ df_test = pd.read_csv(
 # Run inference on validation and test sets
 run_inference(df_valid, "validation")
 run_inference(df_test, "test")
+
+
+# df_testing = pd.read_csv(
+#     "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/merged_train.csv"
+# )
+
+# run_inference(df_testing, "testing")
