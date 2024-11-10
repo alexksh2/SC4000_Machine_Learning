@@ -1,0 +1,124 @@
+2024-11-10 15:00:59,039 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnext50_32x4d.a1h_in1k)
+2024-11-10 15:00:59,295 - INFO - [timm/resnext50_32x4d.a1h_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2024-11-10 15:00:59,520 - INFO - Start of training.
+2024-11-10 15:00:59,520 - INFO - Epoch 1/20
+2024-11-10 15:00:59,520 - INFO - ----------
+2024-11-10 15:02:30,901 - INFO - train Loss: 1.0595 Acc: 0.6065
+2024-11-10 15:02:40,370 - INFO - New best model found at epoch 1 with validation loss 0.8906
+2024-11-10 15:02:40,370 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/best_model.pth
+2024-11-10 15:02:40,370 - INFO - val Loss: 0.8906 Acc: 0.6617
+2024-11-10 15:02:40,370 - INFO - Epoch complete!
+2024-11-10 15:02:40,370 - INFO - Epoch 2/20
+2024-11-10 15:02:40,370 - INFO - ----------
+2024-11-10 15:04:11,913 - INFO - train Loss: 0.7710 Acc: 0.7119
+2024-11-10 15:04:21,444 - INFO - New best model found at epoch 2 with validation loss 0.7379
+2024-11-10 15:04:21,444 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/best_model.pth
+2024-11-10 15:04:21,444 - INFO - val Loss: 0.7379 Acc: 0.7357
+2024-11-10 15:04:21,444 - INFO - Epoch complete!
+2024-11-10 15:04:21,444 - INFO - Epoch 3/20
+2024-11-10 15:04:21,444 - INFO - ----------
+2024-11-10 15:05:53,857 - INFO - train Loss: 0.6221 Acc: 0.7747
+2024-11-10 15:06:03,541 - INFO - New best model found at epoch 3 with validation loss 0.6382
+2024-11-10 15:06:03,541 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/best_model.pth
+2024-11-10 15:06:03,541 - INFO - val Loss: 0.6382 Acc: 0.7782
+2024-11-10 15:06:03,541 - INFO - Epoch complete!
+2024-11-10 15:06:03,541 - INFO - Epoch 4/20
+2024-11-10 15:06:03,541 - INFO - ----------
+2024-11-10 15:07:35,567 - INFO - train Loss: 0.5243 Acc: 0.8116
+2024-11-10 15:07:45,177 - INFO - New best model found at epoch 4 with validation loss 0.6046
+2024-11-10 15:07:45,177 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/best_model.pth
+2024-11-10 15:07:45,177 - INFO - val Loss: 0.6046 Acc: 0.7952
+2024-11-10 15:07:45,177 - INFO - Epoch complete!
+2024-11-10 15:07:45,177 - INFO - Epoch 5/20
+2024-11-10 15:07:45,177 - INFO - ----------
+2024-11-10 15:09:16,578 - INFO - train Loss: 0.4629 Acc: 0.8389
+2024-11-10 15:09:25,987 - INFO - New best model found at epoch 5 with validation loss 0.6012
+2024-11-10 15:09:25,988 - INFO - Best model saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/best_model.pth
+2024-11-10 15:09:25,988 - INFO - val Loss: 0.6012 Acc: 0.7933
+2024-11-10 15:09:25,988 - INFO - Epoch complete!
+2024-11-10 15:09:25,988 - INFO - Epoch 6/20
+2024-11-10 15:09:25,988 - INFO - ----------
+2024-11-10 15:10:57,163 - INFO - train Loss: 0.4065 Acc: 0.8562
+2024-11-10 15:11:06,511 - INFO - val Loss: 0.6108 Acc: 0.7996
+2024-11-10 15:11:06,511 - INFO - Epoch complete!
+2024-11-10 15:11:06,511 - INFO - Epoch 7/20
+2024-11-10 15:11:06,511 - INFO - ----------
+2024-11-10 15:12:37,836 - INFO - train Loss: 0.3611 Acc: 0.8752
+2024-11-10 15:12:47,191 - INFO - val Loss: 0.6100 Acc: 0.7982
+2024-11-10 15:12:47,191 - INFO - Epoch complete!
+2024-11-10 15:12:47,191 - INFO - Epoch 8/20
+2024-11-10 15:12:47,191 - INFO - ----------
+2024-11-10 15:14:17,933 - INFO - train Loss: 0.3086 Acc: 0.8951
+2024-11-10 15:14:27,153 - INFO - val Loss: 0.6414 Acc: 0.8022
+2024-11-10 15:14:27,153 - INFO - Epoch complete!
+2024-11-10 15:14:27,153 - INFO - Epoch 9/20
+2024-11-10 15:14:27,153 - INFO - ----------
+2024-11-10 15:15:58,023 - INFO - train Loss: 0.2647 Acc: 0.9114
+2024-11-10 15:16:07,440 - INFO - val Loss: 0.6514 Acc: 0.7985
+2024-11-10 15:16:07,441 - INFO - Epoch complete!
+2024-11-10 15:16:07,441 - INFO - Epoch 10/20
+2024-11-10 15:16:07,441 - INFO - ----------
+2024-11-10 15:17:39,596 - INFO - train Loss: 0.2335 Acc: 0.9214
+2024-11-10 15:17:48,906 - INFO - val Loss: 0.6904 Acc: 0.7922
+2024-11-10 15:17:48,906 - INFO - Epoch complete!
+2024-11-10 15:17:48,906 - INFO - Epoch 11/20
+2024-11-10 15:17:48,906 - INFO - ----------
+2024-11-10 15:19:20,580 - INFO - train Loss: 0.2015 Acc: 0.9342
+2024-11-10 15:19:30,035 - INFO - val Loss: 0.7127 Acc: 0.8000
+2024-11-10 15:19:30,035 - INFO - Epoch complete!
+2024-11-10 15:19:30,035 - INFO - Epoch 12/20
+2024-11-10 15:19:30,035 - INFO - ----------
+2024-11-10 15:21:02,700 - INFO - train Loss: 0.1546 Acc: 0.9503
+2024-11-10 15:21:12,142 - INFO - val Loss: 0.7232 Acc: 0.7945
+2024-11-10 15:21:12,142 - INFO - Epoch complete!
+2024-11-10 15:21:12,142 - INFO - Epoch 13/20
+2024-11-10 15:21:12,142 - INFO - ----------
+2024-11-10 15:22:44,704 - INFO - train Loss: 0.1362 Acc: 0.9563
+2024-11-10 15:22:54,143 - INFO - val Loss: 0.7309 Acc: 0.7956
+2024-11-10 15:22:54,143 - INFO - Epoch complete!
+2024-11-10 15:22:54,143 - INFO - Epoch 14/20
+2024-11-10 15:22:54,143 - INFO - ----------
+2024-11-10 15:24:26,609 - INFO - train Loss: 0.1237 Acc: 0.9616
+2024-11-10 15:24:36,151 - INFO - val Loss: 0.7430 Acc: 0.7967
+2024-11-10 15:24:36,152 - INFO - Epoch complete!
+2024-11-10 15:24:36,152 - INFO - Epoch 15/20
+2024-11-10 15:24:36,152 - INFO - ----------
+2024-11-10 15:26:08,496 - INFO - train Loss: 0.1084 Acc: 0.9676
+2024-11-10 15:26:17,834 - INFO - val Loss: 0.7161 Acc: 0.8041
+2024-11-10 15:26:17,834 - INFO - Epoch complete!
+2024-11-10 15:26:17,834 - INFO - Epoch 16/20
+2024-11-10 15:26:17,834 - INFO - ----------
+2024-11-10 15:27:49,921 - INFO - train Loss: 0.0988 Acc: 0.9702
+2024-11-10 15:27:59,214 - INFO - val Loss: 0.7604 Acc: 0.7937
+2024-11-10 15:27:59,214 - INFO - Epoch complete!
+2024-11-10 15:27:59,214 - INFO - Epoch 17/20
+2024-11-10 15:27:59,214 - INFO - ----------
+2024-11-10 15:29:30,620 - INFO - train Loss: 0.0945 Acc: 0.9711
+2024-11-10 15:29:39,784 - INFO - val Loss: 0.7488 Acc: 0.8067
+2024-11-10 15:29:39,784 - INFO - Epoch complete!
+2024-11-10 15:29:39,784 - INFO - Epoch 18/20
+2024-11-10 15:29:39,784 - INFO - ----------
+2024-11-10 15:31:11,725 - INFO - train Loss: 0.0879 Acc: 0.9740
+2024-11-10 15:31:21,042 - INFO - val Loss: 0.7563 Acc: 0.8041
+2024-11-10 15:31:21,043 - INFO - Epoch complete!
+2024-11-10 15:31:21,043 - INFO - Epoch 19/20
+2024-11-10 15:31:21,043 - INFO - ----------
+2024-11-10 15:32:52,417 - INFO - train Loss: 0.0827 Acc: 0.9756
+2024-11-10 15:33:01,669 - INFO - val Loss: 0.7858 Acc: 0.7956
+2024-11-10 15:33:01,670 - INFO - Epoch complete!
+2024-11-10 15:33:01,670 - INFO - Epoch 20/20
+2024-11-10 15:33:01,670 - INFO - ----------
+2024-11-10 15:34:33,346 - INFO - train Loss: 0.0813 Acc: 0.9763
+2024-11-10 15:34:42,710 - INFO - val Loss: 0.7654 Acc: 0.7941
+2024-11-10 15:34:42,710 - INFO - Epoch complete!
+2024-11-10 15:34:42,791 - INFO - Model saved to /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/last.pth
+2024-11-10 15:34:42,806 - INFO - Best validation probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/best_validation_probabilities.csv
+2024-11-10 15:34:42,905 - INFO - Training curves saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/training_curves.png
+2024-11-10 15:34:52,118 - INFO - Test probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/test_probabilities.csv
+2024-11-10 15:34:52,131 - INFO - Log Loss: 0.8407
+2024-11-10 15:34:52,131 - INFO - Accuracy: 0.7890
+2024-11-10 15:34:52,131 - INFO - Precision: 0.7888
+2024-11-10 15:34:52,131 - INFO - Recall: 0.7890
+2024-11-10 15:34:52,131 - INFO - F1 Score: 0.7879
+2024-11-10 15:34:52,131 - INFO - F2 Score: 0.7883
+2024-11-10 15:34:52,202 - INFO - Confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/test_confusion_matrix.png

@@ -32,8 +32,8 @@ logger = logging.getLogger()
 
 # List of CSV files containing individual model predictions
 val_csv_files = [
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241103_232814/best_validation_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241103_190631/validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/best_validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601/validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/best_validation_probabilities.csv",
@@ -42,12 +42,12 @@ val_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_validation_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_000732/validation_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_154159/validation_inference_results.csv",
 ]
 
 test_csv_files = [
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241103_232814/test_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241103_190631/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/test_probabilities.csv",
@@ -56,15 +56,15 @@ test_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_000732/validation_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_154159/test_inference_results.csv",
 ]
 
 valid_df = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/valid_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/val_df_imbalance.csv"
 )
 
 test_df = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df_imbalance.csv"
 )
 
 
@@ -141,7 +141,7 @@ cv_results = lgb.cv(
 
 
 # Train final model with optimal rounds
-gbm = lgb.train(params, train_data, 834)
+gbm = lgb.train(params, train_data, 434)
 
 # Feature Importance
 feature_importance = gbm.feature_importance()
