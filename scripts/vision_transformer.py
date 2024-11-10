@@ -94,16 +94,18 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 # Preparing Data
-df_train = pd.read_csv("/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_df_imbalance.csv")
+df_train = pd.read_csv(
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_labels.csv"
+)
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/val_df_imbalance.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/validation_labels.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df_imbalance.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_labels.csv"
 )
 
 # Define the path to your train_images directory
-train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images_old"
+train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
 
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")

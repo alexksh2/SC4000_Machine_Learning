@@ -110,12 +110,12 @@ def run_inference(dataset_df, dataset_name):
 
 
 # Paths and datasets
-data_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images_old"
+data_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/val_df_imbalance.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/validation_labels.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df_imbalance.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_labels.csv"
 )
 
 # Run inference on validation and test sets

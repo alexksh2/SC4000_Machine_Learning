@@ -8,3 +8,4 @@ scripts/__pycache__
 *.safetensors
 logs
 train_images_old
+all_cassava_images
