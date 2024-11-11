@@ -134,22 +134,21 @@ calc_mean, calc_std = calc_mean_std(train_df, trainloader)
 # Data augmentation
 proc_aug = transforms.Compose(
     [
-        transforms.ToPILImage(),
+        transforms.ToTensor(),       
+        transforms.Resize(size=IMAGE_SIZE),
         transforms.RandomHorizontalFlip(p=0.5),
         transforms.RandomVerticalFlip(p=0.5),
-        transforms.RandomRotation(15),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
-        transforms.RandomResizedCrop(IMAGE_SIZE),
-        transforms.ToTensor(),
+        #transforms.RandomRotation(15),
+        #transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+        #transforms.RandomResizedCrop(IMAGE_SIZE),
         transforms.Normalize(mean=calc_mean, std=calc_std),
     ]
 )
 
 test_transform = transforms.Compose(
     [
-        transforms.ToPILImage(),
-        transforms.Resize(IMAGE_SIZE),
         transforms.ToTensor(),
+        transforms.Resize(IMAGE_SIZE),
         transforms.Normalize(mean=calc_mean, std=calc_std),
     ]
 )
@@ -225,7 +224,8 @@ for name, param in model.named_parameters():
         param.requires_grad = False
 
 
-criterion = SigmoidFocalLoss(gamma=2.0, alpha=0.25, label_smoothing=0.1)
+#criterion = SigmoidFocalLoss(gamma=2.0, alpha=0.25, label_smoothing=0.1)
+criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARNING_RATE_MAX)
 scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=1, eta_min=LEARNING_RATE_MIN)
 
