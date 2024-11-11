@@ -2,6 +2,10 @@ from datetime import datetime
 import logging
 import pandas as pd
 import numpy as np
+
+import matplotlib
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 from glob import glob
 import os
@@ -90,16 +94,18 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 # Preparing Data
-df_train = pd.read_csv("/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_df.csv")
+df_train = pd.read_csv(
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_labels.csv"
+)
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/valid_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/validation_labels.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_labels.csv"
 )
 
 # Define the path to your train_images directory
-train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images"
+train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
 
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")
@@ -183,6 +189,7 @@ dataloader = {
 
 # Training model
 model_name = "google/vit-base-patch16-224"
+# model_name = "google/vit-huge-patch14-224-in21k"
 num_classes = num_unique_labels
 
 model = ViTForImageClassification.from_pretrained(

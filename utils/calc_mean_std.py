@@ -57,11 +57,11 @@ def calc_mean_std(train_df, trainloader):
 
 # Preparing Data
 df_train = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_labels.csv"
 )
 
 # Define the path to your train_images directory
-train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images"
+train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
 
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")

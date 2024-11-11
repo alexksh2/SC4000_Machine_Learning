@@ -134,21 +134,20 @@ calc_mean, calc_std = calc_mean_std(train_df, trainloader)
 # Data augmentation
 proc_aug = transforms.Compose(
     [
-        transforms.ToTensor(),       
+        transforms.ToTensor(),
         transforms.Resize(size=IMAGE_SIZE),
-        transforms.RandomHorizontalFlip(p=0.5),
         transforms.RandomVerticalFlip(p=0.5),
-        #transforms.RandomRotation(15),
-        #transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
-        #transforms.RandomResizedCrop(IMAGE_SIZE),
+        transforms.RandomHorizontalFlip(p=0.5),
         transforms.Normalize(mean=calc_mean, std=calc_std),
     ]
 )
 
 test_transform = transforms.Compose(
     [
-        transforms.ToTensor(),
+        transforms.ToPILImage(),
         transforms.Resize(IMAGE_SIZE),
+        transforms.ToTensor(),
+        transforms.Resize(size=IMAGE_SIZE),
         transforms.Normalize(mean=calc_mean, std=calc_std),
     ]
 )
@@ -170,32 +169,7 @@ dataloader = {
     ),
 }
 
-class SigmoidFocalLoss(nn.Module):
-    def __init__(self, gamma=2.0, alpha=0.25, label_smoothing=0.1):
-        super(SigmoidFocalLoss, self).__init__()
-        self.gamma = gamma
-        self.alpha = alpha
-        self.label_smoothing = label_smoothing
 
-    def forward(self, inputs, targets):
-        # Convert targets to one-hot format
-        targets_one_hot = torch.nn.functional.one_hot(targets, num_classes=inputs.size(1)).float()
-        
-        # Apply label smoothing
-        targets_one_hot = targets_one_hot * (1 - self.label_smoothing) + 0.5 * self.label_smoothing
-        
-        # Calculate focal weight
-        focal_weight = torch.pow(1 - inputs, self.gamma) * targets_one_hot + inputs * (1 - targets_one_hot)
-        
-        # Calculate the BCE loss with focal weight
-        bce_loss = -(
-            self.alpha * (targets_one_hot * torch.log(inputs)) +
-            (1 - self.alpha) * ((1 - targets_one_hot) * torch.log(1 - inputs))
-        )
-        
-        return (focal_weight * bce_loss).mean()
-
-    
 class CustomClassifier(nn.Module):
     def __init__(self, model, num_unique_labels):
         super(CustomClassifier, self).__init__()
@@ -224,13 +198,11 @@ for name, param in model.named_parameters():
         param.requires_grad = False
 
 
-#criterion = SigmoidFocalLoss(gamma=2.0, alpha=0.25, label_smoothing=0.1)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARNING_RATE_MAX)
 scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=1, eta_min=LEARNING_RATE_MIN)
 
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-#device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
 train_losses, val_losses = [], []

@@ -1,6 +1,11 @@
 from datetime import datetime
 import logging
 import pandas as pd
+
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 from glob import glob
 import os
@@ -93,17 +98,17 @@ logger = logging.getLogger()
 
 # Preparing Data
 df_train = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_labels.csv"
 )
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/valid_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/validation_labels.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_labels.csv"
 )
 
 # Define the path to your train_images directory
-train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images"
+train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
 
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")
@@ -169,9 +174,10 @@ max_grad_norm = 1000
 num_classes = 5
 criterion = nn.CrossEntropyLoss()
 
+
 # class for custom RexNext
 class CustomResNext(nn.Module):
-    def __init__(self, model_name='resnext50_32x4d', pretrained=True):
+    def __init__(self, model_name="resnext50_32x4d", pretrained=True):
         super().__init__()
         self.model = timm.create_model(model_name, pretrained=pretrained)
         n_features = self.model.fc.in_features
@@ -181,10 +187,13 @@ class CustomResNext(nn.Module):
         x = self.model(x)
         return x
 
+
 # Initialize model and optimizer
 resnext = CustomResNext()
 optimizer = AdamW(resnext.parameters(), lr=1e-4, weight_decay=1e-6)
-scheduler = ReduceLROnPlateau(optimizer, mode = 'min', factor = 0.2, patience = 5, verbose = True, eps = 1e-6)
+scheduler = ReduceLROnPlateau(
+    optimizer, mode="min", factor=0.2, patience=5, verbose=True, eps=1e-6
+)
 
 # Move the model to the GPU if available
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

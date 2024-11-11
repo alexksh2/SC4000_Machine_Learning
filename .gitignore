@@ -5,6 +5,7 @@ scripts/__pycache__
 *.pth
 *.json
 *.bin
-logs
 *.safetensors
+logs
 train_images_old
+all_cassava_images
