@@ -54,7 +54,7 @@ def run_inference(dataset_df, dataset_name):
         image_path = os.path.join(data_path, image_name)
         image = preprocess_image(image_path)
         image = np.expand_dims(image, axis=0)  # Add batch dimension
-        probabilities = classifier(image)
+        probabilities = model(image)
         probabilities = probabilities.numpy().flatten()  # Flatten to a 6-class vector
         # Check if the probability for class 5 exists
         if len(probabilities) > 5:
