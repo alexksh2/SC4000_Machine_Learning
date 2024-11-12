@@ -25,7 +25,7 @@ def set_batch_size(new_batch_size):
     return BATCH_SIZE
 
 class TestConstDataset(Dataset):
-    def __init__(self, df, transform=None):
+    def __init__(self, df, train_path, transform=None):
         self.df = df
         self.file_names = df["image_id"].values
         # self.labels = df["labels"].values
@@ -69,11 +69,11 @@ def calc_mean_std(test_df, trainloader):
 
 
 #pass in dataframe, return calculated mean and standard deviation
-def norm_data (dataframe):
+def norm_data (dataframe, train_path):
     proc_resize = transforms.Compose(
         [transforms.ToTensor(), transforms.Resize(size=IMAGE_SIZE)]
     )
-    test_df = TestConstDataset(dataframe, transform = proc_resize)
+    test_df = TestConstDataset(dataframe, train_path, transform = proc_resize)
     trainloader = torch.utils.data.DataLoader(
         test_df, BATCH_SIZE, shuffle=True, num_workers=0
     )
