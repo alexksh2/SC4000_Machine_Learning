@@ -35,14 +35,14 @@ os.makedirs(output_dir, exist_ok=True)
 
 model = tf.keras.models.load_model('../checkpoint/inception.keras')
 
+WIDTH = 224
+HEIGHT = 224    
 
 # Preprocessing function
 def preprocess_image(image_path):
-    image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = cv2.resize(image, (IMAGE_SIZE[0], IMAGE_SIZE[1]))
-    image = image / 255.0  # Normalize to [0, 1]
-    return image
+    image = tf.keras.preprocessing.image.load_img(image_path)
+    resized_image = image.resize((WIDTH, HEIGHT))
+    return resized_image
 
 # Inference and evaluation function with probability redistribution before argmax
 def run_inference(dataset_df, dataset_name):
@@ -54,7 +54,8 @@ def run_inference(dataset_df, dataset_name):
         image_path = os.path.join(data_path, image_name)
         image = preprocess_image(image_path)
         image = np.expand_dims(image, axis=0)  # Add batch dimension
-        probabilities = model(image)
+        image = tf.cast(image, tf.float32)
+        probabilities = model.predict(image)
         probabilities = probabilities.numpy().flatten()  # Flatten to a 6-class vector
         # Check if the probability for class 5 exists
         if len(probabilities) > 5:
