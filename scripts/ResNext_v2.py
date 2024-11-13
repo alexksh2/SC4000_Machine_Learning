@@ -98,17 +98,17 @@ logger = logging.getLogger()
 
 # Preparing Data
 df_train = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_labels.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/train_df_imbalance_2020.csv"
 )
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/validation_labels.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/val_df_imbalance_2020.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_labels.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/test_df_imbalance_2020.csv"
 )
 
 # Define the path to your train_images directory
-train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
+train_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/train_images"
 
 # Use glob to get all image files with .jpg or .jpeg extensions
 image_files = glob(train_path + "/*.jp*g")
@@ -196,7 +196,7 @@ scheduler = ReduceLROnPlateau(
 )
 
 # Move the model to the GPU if available
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 resnext = resnext.to(device)
 
 train_losses, val_losses = [], []

@@ -1,0 +1,43 @@
+2024-11-12 00:03:17,542 - INFO - Validation accuracy: 0.7542
+2024-11-12 00:05:07,074 - INFO - Validation accuracy: 0.8178
+2024-11-12 00:06:57,141 - INFO - Validation accuracy: 0.8336
+2024-11-12 00:08:47,761 - INFO - Validation accuracy: 0.8425
+2024-11-12 00:10:38,735 - INFO - Validation accuracy: 0.8393
+2024-11-12 00:12:29,840 - INFO - Validation accuracy: 0.8444
+2024-11-12 00:14:20,609 - INFO - Validation accuracy: 0.8430
+2024-11-12 00:16:10,850 - INFO - Validation accuracy: 0.8453
+2024-11-12 00:18:01,430 - INFO - Validation accuracy: 0.8467
+2024-11-12 00:19:50,678 - INFO - Validation accuracy: 0.8411
+2024-11-12 00:21:41,084 - INFO - Validation accuracy: 0.8453
+2024-11-12 00:23:32,029 - INFO - Validation accuracy: 0.8477
+2024-11-12 00:25:23,179 - INFO - Validation accuracy: 0.8407
+2024-11-12 00:27:13,897 - INFO - Validation accuracy: 0.8467
+2024-11-12 00:29:04,950 - INFO - Validation accuracy: 0.8458
+2024-11-12 00:30:55,738 - INFO - Validation accuracy: 0.8369
+2024-11-12 00:32:46,743 - INFO - Validation accuracy: 0.8397
+2024-11-12 00:34:36,782 - INFO - Validation accuracy: 0.8439
+2024-11-12 00:36:26,759 - INFO - Validation accuracy: 0.8397
+2024-11-12 00:38:16,995 - INFO - Validation accuracy: 0.8346
+2024-11-12 00:40:07,579 - INFO - Validation accuracy: 0.8393
+2024-11-12 00:41:57,628 - INFO - Validation accuracy: 0.8397
+2024-11-12 00:43:48,199 - INFO - Validation accuracy: 0.8430
+2024-11-12 00:45:38,454 - INFO - Validation accuracy: 0.8407
+2024-11-12 00:47:29,368 - INFO - Validation accuracy: 0.8346
+2024-11-12 00:49:19,181 - INFO - Validation accuracy: 0.8393
+2024-11-12 00:51:09,457 - INFO - Validation accuracy: 0.8364
+2024-11-12 00:52:59,466 - INFO - Validation accuracy: 0.8449
+2024-11-12 00:54:49,898 - INFO - Validation accuracy: 0.8439
+2024-11-12 00:56:41,290 - INFO - Validation accuracy: 0.8383
+2024-11-12 00:56:58,221 - INFO - Validation accuracy: 0.8509
+2024-11-12 00:56:58,221 - INFO - Prediction metrics: {'test_loss': 0.4421050548553467, 'test_accuracy': 0.8509345794392523, 'test_runtime': 9.0935, 'test_samples_per_second': 235.333, 'test_steps_per_second': 0.55}
+2024-11-12 00:56:58,231 - INFO - Validation probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241112_000032/validation_probabilities.csv
+2024-11-12 00:56:58,323 - INFO - Training plots saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241112_000032/training_plots.png
+2024-11-12 00:57:13,511 - INFO - Validation accuracy: 0.8411
+2024-11-12 00:57:13,520 - INFO - Test probabilities saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241112_000032/test_probabilities.csv
+2024-11-12 00:57:13,521 - INFO - Test Log Loss: 0.5053
+2024-11-12 00:57:13,526 - INFO - Test Accuracy: 0.8411
+2024-11-12 00:57:13,526 - INFO - Test Precision: 0.8357
+2024-11-12 00:57:13,526 - INFO - Test Recall: 0.8411
+2024-11-12 00:57:13,526 - INFO - Test F1 Score: 0.8376
+2024-11-12 00:57:13,526 - INFO - Test F2 Score: 0.8395
+2024-11-12 00:57:13,593 - INFO - Test confusion matrix saved at /home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241112_000032/test_confusion_matrix.png
