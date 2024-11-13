@@ -16,6 +16,7 @@ from sklearn.metrics import (
 )
 import matplotlib.pyplot as plt
 import os
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 # Image and path configurations
 IMAGE_SIZE = [224, 224]  # CropNet model expects 224x224 images
@@ -28,6 +29,8 @@ os.makedirs(output_dir, exist_ok=True)
 classifier = hub.KerasLayer(
     "https://kaggle.com/models/google/cropnet/frameworks/TensorFlow2/variations/classifier-cassava-disease-v1/versions/1"
 )
+
+
 # Preprocessing function
 def preprocess_image(image_path):
     image = cv2.imread(image_path)
@@ -35,6 +38,8 @@ def preprocess_image(image_path):
     image = cv2.resize(image, (IMAGE_SIZE[0], IMAGE_SIZE[1]))
     image = image / 255.0  # Normalize to [0, 1]
     return image
+
+
 # Inference and evaluation function with probability redistribution before argmax
 def run_inference(dataset_df, dataset_name):
     image_ids = dataset_df["image_id"].values
@@ -91,13 +96,15 @@ def run_inference(dataset_df, dataset_name):
     )
     plt.savefig(confusion_matrix_path)
     print(f"{dataset_name} confusion matrix saved at {confusion_matrix_path}")
+
+
 # Paths and datasets
-data_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
+data_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/train_images"
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/validation_labels.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/val_df_imbalance_2020.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_labels.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/test_df_imbalance_2020.csv"
 )
 # Run inference on validation and test sets
 run_inference(df_valid, "validation")
