@@ -74,7 +74,6 @@ def run_inference(dataset_df, dataset_name):
         else:
             # No extra class, use the original probabilities
             redistributed_probs = probabilities[:5]
-        pred_prob = max(redistributed_probs[0])
         pred_label = np.argmax(redistributed_probs, axis=-1)[0] 
         pred_labels.append(pred_label)
         pred_probs.append(redistributed_probs.squeeze())
