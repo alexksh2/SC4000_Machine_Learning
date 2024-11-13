@@ -32,8 +32,8 @@ logger = logging.getLogger()
 
 # List of CSV files containing individual model predictions
 val_csv_files = [
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241112_115208_2020/best_validation_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241112_000032_2020/validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241113_164038 (m1920_on_d20)/validation_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241113_171759 (m1920_on_d20)/validation_inference_results.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/best_validation_probabilities.csv",
@@ -46,8 +46,8 @@ val_csv_files = [
 ]
 
 test_csv_files = [
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241112_115208_2020/test_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241112_000032_2020/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241113_164038 (m1920_on_d20)/test_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241113_171759 (m1920_on_d20)/test_inference_results.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/test_probabilities.csv",
