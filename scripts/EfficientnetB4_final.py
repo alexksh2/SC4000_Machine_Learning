@@ -28,19 +28,22 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 IMAGE_SIZE = [224, 224]  # CropNet model expects 224x224 images
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 output_dir = (
-    f"/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficient_b4_final/{timestamp}/"
+    f"/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project_Git/SC4000_Machine_Learning/output/efficient_b4_final/{timestamp}/"
 )
 os.makedirs(output_dir, exist_ok=True)
 # Load the pretrained CropNet model
 
-model = tf.keras.models.load_model('../checkpoint/inception.keras')
+model = tf.keras.models.load_model('/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/inception.keras')
 
 WIDTH = 224
 HEIGHT = 224    
 
+
+
 # Preprocessing function
 def preprocess_image(image_path):
     image = tf.keras.preprocessing.image.load_img(image_path)
+    print(image_path)
     resized_image = image.resize((WIDTH, HEIGHT))
     return resized_image
 
@@ -49,6 +52,7 @@ def run_inference(dataset_df, dataset_name):
     image_ids = dataset_df["image_id"].values
     true_labels = dataset_df["labels"].values
     # Perform inference
+    pred_labels = []
     pred_probs = []
     for image_name in image_ids:
         image_path = os.path.join(data_path, image_name)
@@ -70,16 +74,20 @@ def run_inference(dataset_df, dataset_name):
         else:
             # No extra class, use the original probabilities
             redistributed_probs = probabilities[:5]
-        pred_probs.append(redistributed_probs)
+        pred_prob = max(redistributed_probs[0])
+        pred_label = np.argmax(redistributed_probs, axis=-1)[0] 
+        pred_labels.append(pred_label)
+        pred_probs.append(redistributed_probs.squeeze())
+        
     # Convert redistributed probabilities to predicted labels
-    pred_labels = np.argmax(pred_probs, axis=1)
-    # Evaluation metrics
+
+
     accuracy = accuracy_score(true_labels, pred_labels)
     precision = precision_score(true_labels, pred_labels, average="weighted")
     recall = recall_score(true_labels, pred_labels, average="weighted")
     f1 = f1_score(true_labels, pred_labels, average="weighted")
     f2 = fbeta_score(true_labels, pred_labels, beta=2, average="weighted")
-    logloss = log_loss(true_labels, pred_probs)
+    logloss = log_loss(true_labels, pred_probs, labels=[0,1,2,3,4])
     print(f"{dataset_name} - Accuracy: {accuracy:.4f}")
     print(f"{dataset_name} - Precision: {precision:.4f}")
     print(f"{dataset_name} - Recall: {recall:.4f}")
@@ -103,17 +111,18 @@ def run_inference(dataset_df, dataset_name):
     print(f"{dataset_name} confusion matrix saved at {confusion_matrix_path}")
 
 # Paths and datasets
-data_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/all_cassava_images"
+data_path = "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_duplicated_new/train_images"
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/validation_labels.csv"
+    "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_duplicated_new/valid_df.csv"
 )
-df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_labels.csv"
-)
+# df_test = pd.read_csv(
+#     "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_duplicate/test_df.csv"
+# )
+
 
 # Run inference on validation and test sets
 run_inference(df_valid, "validation")
-run_inference(df_test, "test")
+# run_inference(df_test, "test")
 # df_testing = pd.read_csv(
 #     "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/merged_train.csv"
 # )
