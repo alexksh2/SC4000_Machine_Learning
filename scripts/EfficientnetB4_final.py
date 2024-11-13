@@ -56,7 +56,7 @@ def run_inference(dataset_df, dataset_name):
         image = np.expand_dims(image, axis=0)  # Add batch dimension
         image = tf.cast(image, tf.float32)
         probabilities = model.predict(image)
-        probabilities = probabilities.numpy().flatten()  # Flatten to a 6-class vector
+        #probabilities = probabilities.numpy().flatten()  # Flatten to a 6-class vector
         # Check if the probability for class 5 exists
         if len(probabilities) > 5:
             # Extract the extra probability for class 5 and the first 5 classes
