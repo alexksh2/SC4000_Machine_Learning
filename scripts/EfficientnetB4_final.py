@@ -110,18 +110,20 @@ def run_inference(dataset_df, dataset_name):
     print(f"{dataset_name} confusion matrix saved at {confusion_matrix_path}")
 
 # Paths and datasets
-data_path = "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_duplicated_new/train_images"
+data_path = "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_1920/train_images_old"
+
 df_valid = pd.read_csv(
-    "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_duplicated_new/valid_df.csv"
+    "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_1920/val_df_imbalance.csv"
 )
-# df_test = pd.read_csv(
-#     "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_duplicate/test_df.csv"
-# )
+
+df_test = pd.read_csv(
+    "/Users/alexshienhowkhoo/Documents/NTU_BCG/NTU_BCG_Y3S1/Others/SC4000_Machine_Learning/SC4000_Project/SC4000_Machine_Learning/data_1920/test_df_imbalance.csv"
+)
 
 
 # Run inference on validation and test sets
 run_inference(df_valid, "validation")
-# run_inference(df_test, "test")
+run_inference(df_test, "test")
 # df_testing = pd.read_csv(
 #     "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/merged_train.csv"
 # )
