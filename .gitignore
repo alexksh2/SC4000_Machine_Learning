@@ -10,6 +10,6 @@ logs
 train_images_old
 all_cassava_images
 data_2020
-output/efficientnet/model.keras
-output/efficientnet/model
-output/efficientnet/model.h5
+output/efficientnet/20_model/model.keras
+output/efficientnet/20_model/model
+output/efficientnet/20_model/model.h5

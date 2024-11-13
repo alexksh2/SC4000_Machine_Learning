@@ -42,6 +42,7 @@ val_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241113_220413_2020/validation_inference_results.csv",
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241112_115704_2020/validation_inference_results.csv",
 ]
 
@@ -56,6 +57,7 @@ test_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241113_220413_2020/test_inference_results.csv",
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241112_115704_2020/test_inference_results.csv",
 ]
 
@@ -87,9 +89,7 @@ for i, file in enumerate(val_csv_files):
         )
 
 # Extract features and labels
-X_val = merged_df.drop(
-    columns=["image_id", "labels"]
-).values
+X_val = merged_df.drop(columns=["image_id", "labels"]).values
 y_val = merged_df["labels"].values
 
 # Convert to LightGBM dataset format
@@ -141,7 +141,7 @@ cv_results = lgb.cv(
 
 
 # Train final model with optimal rounds
-gbm = lgb.train(params, train_data, 434)
+gbm = lgb.train(params, train_data, 600)
 
 # Feature Importance
 feature_importance = gbm.feature_importance()
