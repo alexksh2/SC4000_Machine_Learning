@@ -32,8 +32,8 @@ logger = logging.getLogger()
 
 # List of CSV files containing individual model predictions
 val_csv_files = [
-    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241113_164038 (m1920_on_d20)/validation_inference_results.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241113_171759 (m1920_on_d20)/validation_inference_results.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953_imbalance/best_validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601_imbalance/validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/best_validation_probabilities.csv",
@@ -42,13 +42,13 @@ val_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_validation_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241113_235937_2020/validation_inference_results.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241112_115704_2020/validation_inference_results.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241114_154207_imbalance/validation_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_154159_imbalance/validation_inference_results.csv",
 ]
 
 test_csv_files = [
-    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241113_164038 (m1920_on_d20)/test_inference_results.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241113_171759 (m1920_on_d20)/test_inference_results.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953_imbalance/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601_imbalance/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/inception/20241104_124742/test_probabilities.csv",
@@ -57,16 +57,16 @@ test_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241113_235937_2020/test_inference_results.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241112_115704_2020/test_inference_results.csv",
+    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241114_154207_imbalance/test_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_154159_imbalance/test_inference_results.csv",
 ]
 
 valid_df = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/val_df_imbalance_2020.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/val_df_imbalance.csv"
 )
 
 test_df = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/test_df_imbalance_2020.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df_imbalance.csv"
 )
 
 
@@ -141,7 +141,7 @@ cv_results = lgb.cv(
 
 
 # Train final model with optimal rounds
-gbm = lgb.train(params, train_data, 419)
+gbm = lgb.train(params, train_data, 467)
 
 # Feature Importance
 feature_importance = gbm.feature_importance()

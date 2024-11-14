@@ -32,7 +32,8 @@ os.makedirs(output_dir, exist_ok=True)
 # Load the pretrained CropNet model
 
 model = tf.keras.models.load_model(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20_model/model.keras", compile=False
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/1920_model/efficientnet.keras",
+    compile=False,
 )
 
 
@@ -109,12 +110,12 @@ def run_inference(dataset_df, dataset_name):
     print(f"{dataset_name} confusion matrix saved at {confusion_matrix_path}")
 
 # Paths and datasets
-data_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/train_images"
+data_path = "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/train_images_old"
 df_valid = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/val_df_imbalance_2020.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/val_df_imbalance.csv"
 )
 df_test = pd.read_csv(
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data_2020/test_df_imbalance_2020.csv"
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/data/test_df_imbalance.csv"
 )
 
 

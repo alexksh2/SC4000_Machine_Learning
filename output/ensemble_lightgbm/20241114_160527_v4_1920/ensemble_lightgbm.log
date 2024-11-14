@@ -1,0 +1,5 @@
+2024-11-14 16:05:30,195 - INFO - Ensemble Test Accuracy: 0.89467849
+2024-11-14 16:05:30,195 - INFO - Ensemble Test Precision: 0.89575731
+2024-11-14 16:05:30,196 - INFO - Ensemble Test Recall: 0.89467849
+2024-11-14 16:05:30,196 - INFO - Ensemble Test F1 Score: 0.89476759
+2024-11-14 16:05:30,196 - INFO - Ensemble Test F2 Score: 0.89460836
