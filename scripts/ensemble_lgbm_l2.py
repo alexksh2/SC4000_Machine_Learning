@@ -33,12 +33,12 @@ logger = logging.getLogger()
 # List of CSV files containing individual model predictions
 val_csv_files = [
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/ensemble_lightgbm/20241114_235505_outputforL2/val_inference_results_with_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601_imbalance/validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/ensemble_logreg/logreg_1920_val.csv",
 ]
 
 test_csv_files = [
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/ensemble_lightgbm/20241114_235505_outputforL2/test_inference_results_with_probabilities.csv",
-    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601_imbalance/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/ensemble_lightgbm/20241114_235505_outputforL2/test_inference_results_with_probabilities.csv",
 ]
 
 valid_df = pd.read_csv(
@@ -121,7 +121,7 @@ cv_results = lgb.cv(
 
 
 # Train final model with optimal rounds
-gbm = lgb.train(params, train_data, 382)
+gbm = lgb.train(params, train_data, 997)
 
 # Feature Importance
 feature_importance = gbm.feature_importance()
