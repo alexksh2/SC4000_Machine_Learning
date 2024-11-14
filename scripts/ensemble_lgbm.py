@@ -32,7 +32,7 @@ logger = logging.getLogger()
 
 # List of CSV files containing individual model predictions
 val_csv_files = [
-    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953_imbalance/best_validation_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953_imbalance/best_validation_probabilities.csv",
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601_imbalance/validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/best_validation_probabilities.csv",
@@ -42,12 +42,12 @@ val_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/best_validation_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/best_validation_probabilities.csv",
-    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241114_154207_imbalance/validation_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241114_154207_imbalance/validation_inference_results.csv",
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_154159_imbalance/validation_inference_results.csv",
 ]
 
 test_csv_files = [
-    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953_imbalance/test_probabilities.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnext/20241110_145953_imbalance/test_probabilities.csv",
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit/20241110_134601_imbalance/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/vit_v2/20241104_164221/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/resnet/20241104_010113/test_probabilities.csv",
@@ -57,7 +57,7 @@ test_csv_files = [
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnetb0/20241104_125022/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cnn/20241104_143543/test_probabilities.csv",
     # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/alexnet/20241104_143840/test_probabilities.csv",
-    # "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241114_154207_imbalance/test_inference_results.csv",
+    "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/efficientnet/20241114_154207_imbalance/test_inference_results.csv",
     "/home/samic_yongjian/temp/SC4000_Machine_Learning/output/cropnet/20241110_154159_imbalance/test_inference_results.csv",
 ]
 
@@ -141,7 +141,7 @@ cv_results = lgb.cv(
 
 
 # Train final model with optimal rounds
-gbm = lgb.train(params, train_data, 467)
+gbm = lgb.train(params, train_data, 382)
 
 # Feature Importance
 feature_importance = gbm.feature_importance()
@@ -166,6 +166,21 @@ plt.gca().invert_yaxis()
 
 # Save the plot
 plt.savefig(os.path.join(output_dir, "feature_importance.png"))
+
+# probabilities for val set
+val_probabilities = gbm.predict(X_val)  # Get probabilities for each class
+
+# Add the image_id and probabilities for each class to the DataFrame
+val_results_df = pd.DataFrame(
+    val_probabilities,
+    columns=[f"prob_class_{i}" for i in range(val_probabilities.shape[1])],
+)
+val_results_df["image_id"] = merged_df["image_id"].values
+
+# Save the DataFrame with probabilities and image_id
+val_results_path = os.path.join(output_dir, "val_inference_results_with_probabilities.csv")
+val_results_df.to_csv(val_results_path, index=False)
+print(f"Val inference results with probabilities saved at {val_results_path}")
 
 # Merge the CSV files
 for i, file in enumerate(test_csv_files):
@@ -195,7 +210,21 @@ X_test = test_merged_df.drop(columns=["image_id", "labels"]).values
 y_test = test_merged_df["labels"].values
 
 # Predict with the LightGBM meta-model on the test set
-final_predictions = np.argmax(gbm.predict(X_test), axis=1)
+test_probabilities = gbm.predict(X_test)  # Get probabilities for each class
+final_predictions = np.argmax(test_probabilities, axis=1)
+
+# Add the image_id and probabilities for each class to the DataFrame
+test_results_df = pd.DataFrame(
+    test_probabilities,
+    columns=[f"prob_class_{i}" for i in range(test_probabilities.shape[1])],
+)
+test_results_df["image_id"] = test_merged_df["image_id"].values
+# test_results_df["predicted_label"] = final_predictions  # Add predicted labels as well
+
+# Save the DataFrame with probabilities and image_id
+test_results_path = os.path.join(output_dir, "test_inference_results_with_probabilities.csv")
+test_results_df.to_csv(test_results_path, index=False)
+print(f"Inference results with probabilities saved at {test_results_path}")
 
 # Calculate metrics
 accuracy = accuracy_score(y_test, final_predictions)
