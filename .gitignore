@@ -14,3 +14,4 @@ output/efficientnet/20_model/model.keras
 output/efficientnet/20_model/model
 output/efficientnet/20_model/model.h5
 output/efficientnet/1920_model/efficientnet.keras
+catboost_info
